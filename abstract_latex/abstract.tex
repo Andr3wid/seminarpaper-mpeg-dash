@@ -1,0 +1,146 @@
+% % % % % % % % % % % % % % % % % % % % % %
+% Präambel
+% % % % % % % % % % % % % % % % % % % % % %
+
+\documentclass[paper = a4, fontsize = 12pt, parskip = half]{scrartcl} % Doku: "scrguide"
+\usepackage[ngerman]{babel} % Sprachenunterstützung für LaTeX; Doku: "gerdoc"7
+\usepackage[T1]{fontenc} % Schriftkodierung
+\usepackage[utf8]{inputenc} % Eingabekodierung
+\usepackage{lmodern} % Schrift: Latin Modern
+
+\usepackage{scrlayer-scrpage}
+\usepackage{microtype} % mikrotypographische Erweiterungen von pdfTeX; s.a. microtype-DE
+\usepackage{amsmath} % AMSmath-Paket der American Mathematical Society (AMS)
+\usepackage{eurosym} % das Euro-Zeichen (?) z.B. mit \EUR{}
+\usepackage{grffile} % erweiterte Unterstützung für Grafikdateinamen (z.B. mehrere Punkte)
+\usepackage{graphicx} % Einbinden von Grafiken; Doku: "grfguide"
+\usepackage{url} % Querverweise können im Text hervorgehoben werden
+\usepackage{hyperref} % Querverweise in Hyperlinks umwandeln
+\usepackage{setspace} % Ermöglicht Änderungen des Zeilenabstands
+\usepackage{paralist} % Erweiterung der Listenumgebungen\usepackage{hyperref}
+\usepackage{csquotes} % advanced facilities for inline and display quotations
+\usepackage{wrapfig} % Grafiken mit Text umfließen
+\usepackage{color}
+
+\usepackage[style=ieee]{biblatex}
+\addbibresource{library.bib}
+
+\hypersetup{pdfborder={0 0 0}}
+\setkomafont{captionlabel}{\small\sffamily\bfseries}
+\addtokomafont{caption}{\small}
+
+%% set heading and footer
+%% scrheadings default: 
+%% footer - middle: page number
+\pagestyle{scrheadings}
+\automark[subsection]{section}
+%% user specific
+%% usage:
+%% \position[heading/footer for the titlepage]{heading/footer for the rest of the document}
+%% heading - left
+% \ihead[]{}
+%% heading - center
+% \chead[]{}
+%% heading - right
+% \ohead[]{}
+%% footer - left
+% \ifoot[]{}
+%% footer - center
+% \cfoot[]{}
+%% footer - right
+% \ofoot[]{}
+
+% % % % % % % % % % % % % % % % % % % % % %
+
+\begin{document}
+% % % % % % % % % % % % % % % % % % % % % %
+% Beginn der Titelseite 
+% % % % % % % % % % % % % % % % % % % % % %
+
+\begin{titlepage}
+
+    \begin{center}
+        \includegraphics{images/logo.jpg} \\
+        \vspace{8mm}
+        \huge\textbf{Alpen-Adria Universität Klagenfurt} \\
+        \vspace{3mm}
+        Fakultät für Technische Wissenschaften \\
+        \vspace{3mm}
+        Institut für Angewandte Informatik \\
+        \vspace{3mm}
+    \end{center}
+    
+    \vspace{5mm}
+    
+    \begin{center}
+        \textbf{Lehrveranstaltung: \\
+            Seminar aus Angewandte Informatik} \\
+        \vspace{2mm}
+        LV-Leiter: Univ.-Prof. Dipl.-Ing. Dr. Hermann Hellwagner \\
+        LV-Nr.: 622.000 \\
+        SS 2021
+    \end{center}
+    
+    \vspace{15mm}
+    
+    \begin{center}
+        \Large\textbf{MPEG-DASH Standard} \\
+        \vspace{2mm}
+        \normalsize Dynamic Adaptive Streaming Over HTTP
+    \end{center}
+    
+    \vspace{40mm}
+    
+    \begin{flushleft}
+        \textbf{Andreas Kogler} \\
+        E-Mail: andrkogler@edu.aau.at \\
+        Studienrichtung: Bachelorstudium Angewandte Informatik \\
+        Matrikel-Nr.: 11702050\\
+        Datum: \today
+    \end{flushleft}
+    
+\end{titlepage}
+
+% % % % % % % % % % % % % % % % % % % % % %
+
+% % % % % % % % % % % % % % % % % % % % % % 
+% Inhalts- und Abbildungsverzeichnis
+% % % % % % % % % % % % % % % % % % % % % %
+
+% \thispagestyle{empty}
+% \tableofcontents
+% \listoffigures
+% \listoftables
+
+% % % % % % % % % % % % % % % % % % % % % %
+
+% % % % % % % % % % % % % % % % % % % % % % 
+% Beginn des Dokuments
+% % % % % % % % % % % % % % % % % % % % % %
+
+% \newpage
+\setcounter{page}{1}
+\onehalfspacing
+
+\section*{Extended Abstract}
+Wie der jährlich herausgegebene Cisco Visual Networking Index \cite{noauthor_cisco_nodate} zeigt steigt der Anteil von Videodaten im globalen Internettraffic rapide. \textbf{TODO: Finde Quelle für Report 2017 - 2022} Mit 2022 sollen Videodaten 78\% des mobilen Gesamtdatenvolumens ausmachen.
+
+Das bisher verbreitete \textit{Real-Time Transport Protocol} operiert unter der Annahme eines statischen IP-Netzwerks wohingegen in modernen Umgebungen Content Distribution Networks (CDNs) verwendet werden. Um diesem Problem und der Vielfalt an proprietären Streamingstandards zu entgegnen hat MPEG einen Standard für \textit{Dynamic Adaptive Streaming over HTTP}, auch bekannt als MPEG-DASH, entwickelt \cite{sodagar_mpeg-dash_2011}.
+
+Im Mittelpunkt steht dabei die dynamische Bitratenadaptierung der Videodaten je nach verfügbarer Bandbreite des Endgeräts. Da sich die verfügbare Bandbreite während der Wiedergabe des Videos ändern kann müssen verschiedene Algorithmen zur dynamischen Selektion der Bitrate angewandt werden \cite{bentaleb_survey_2019}.
+
+Die eigentlichen Audio- und Video-Bitströme werden dabei in kleinere Segmente unterteilt welche wiederum in verschiedenen Qualitätsstufen für den Client zur Auswahl stehen. Jedes Segment besitzt eine eindeutige URL über die es mittels HTTP GET-Request angefragt werden kann. Alle verfügbaren Segment-URLs werden in der \textit{Multimedia Presentation Description (MPD)} angegeben. Durch Einlesen dieser XML-Datei am Anfang des Streamingprozesses lernt der Client über alle verfügbaren Qualitätsstufen und kann diese gemäß des verwendeten Algorithmus auswählen \cite{sodagar_mpeg-dash_2011}.
+
+MPEG-DASH definiert in seiner Spezifikation lediglich die Segmentformate sowie den Aufbau der MPD-Datei. Viele weitere Aspekte wie beispielsweise Austausch der MPD, Codierung der Daten oder Verhalten bei der Bitratenadaption sind Gegenstand der jeweiligen Implementierung. \cite{sodagar_mpeg-dash_2011}
+
+% % % % % % % % % % % % % % % % % % % % % %
+
+% % % % % % % % % % % % % % % % % % % % % % 
+% Literaturverzeichnis
+% % % % % % % % % % % % % % % % % % % % % %
+
+\printbibliography
+
+\end{document}
+
+% % % % % % % % % % % % % % % % % % % % % %
