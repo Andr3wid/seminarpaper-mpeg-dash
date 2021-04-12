@@ -33,7 +33,7 @@
 %% scrheadings default: 
 %% footer - middle: page number
 \pagestyle{scrheadings}
-\automark[subsection]{section}
+%%\automark[subsection]{section}
 %% user specific
 %% usage:
 %% \position[heading/footer for the titlepage]{heading/footer for the rest of the document}
@@ -96,7 +96,7 @@
         E-Mail: andrkogler@edu.aau.at \\
         Studienrichtung: Bachelorstudium Angewandte Informatik \\
         Matrikel-Nr.: 11702050\\
-        Datum: \today
+        Datum: 09. April 2021
     \end{flushleft}
     
 \end{titlepage}
@@ -122,16 +122,16 @@
 \setcounter{page}{1}
 \onehalfspacing
 
-\section*{Extended Abstract}
-Wie der jährlich herausgegebene Cisco Visual Networking Index \cite{noauthor_cisco_nodate} zeigt steigt der Anteil von Videodaten im globalen Internettraffic rapide. \textbf{TODO: Finde Quelle für Report 2017 - 2022} Mit 2022 sollen Videodaten 78\% des mobilen Gesamtdatenvolumens ausmachen.
+\section*{Abstract}
+Wie der jährlich herausgegebene Cisco Visual Networking Index \cite{cisco_syst_inc_cisco_2017} zeigt steigt der Anteil von Videodaten im Internet rapide. Mit Ende 2021 sollen Videodaten 80\% des globalen Gesamtdatenvolumens ausmachen. \cite{cisco_syst_inc_cisco_2017}
 
 Das bisher verbreitete \textit{Real-Time Transport Protocol} operiert unter der Annahme eines statischen IP-Netzwerks wohingegen in modernen Umgebungen Content Distribution Networks (CDNs) verwendet werden. Um diesem Problem und der Vielfalt an proprietären Streamingstandards zu entgegnen hat MPEG einen Standard für \textit{Dynamic Adaptive Streaming over HTTP}, auch bekannt als MPEG-DASH, entwickelt \cite{sodagar_mpeg-dash_2011}.
 
-Im Mittelpunkt steht dabei die dynamische Bitratenadaptierung der Videodaten je nach verfügbarer Bandbreite des Endgeräts. Da sich die verfügbare Bandbreite während der Wiedergabe des Videos ändern kann müssen verschiedene Algorithmen zur dynamischen Selektion der Bitrate angewandt werden \cite{bentaleb_survey_2019}.
+Im Mittelpunkt steht dabei die dynamische Bitratenadaptierung der Videodaten je nach verfügbarer Bandbreite des Endgeräts. Da sich die verfügbare Bandbreite während der Wiedergabe des Videos ändern kann, müssen verschiedene Algorithmen zur dynamischen Selektion der Bitrate angewandt werden \cite{bentaleb_survey_2019}.
 
 Die eigentlichen Audio- und Video-Bitströme werden dabei in kleinere Segmente unterteilt welche wiederum in verschiedenen Qualitätsstufen für den Client zur Auswahl stehen. Jedes Segment besitzt eine eindeutige URL über die es mittels HTTP GET-Request angefragt werden kann. Alle verfügbaren Segment-URLs werden in der \textit{Multimedia Presentation Description (MPD)} angegeben. Durch Einlesen dieser XML-Datei am Anfang des Streamingprozesses lernt der Client über alle verfügbaren Qualitätsstufen und kann diese gemäß des verwendeten Algorithmus auswählen \cite{sodagar_mpeg-dash_2011}.
 
-MPEG-DASH definiert in seiner Spezifikation lediglich die Segmentformate sowie den Aufbau der MPD-Datei. Viele weitere Aspekte wie beispielsweise Austausch der MPD, Codierung der Daten oder Verhalten bei der Bitratenadaption sind Gegenstand der jeweiligen Implementierung. \cite{sodagar_mpeg-dash_2011}
+MPEG-DASH definiert in seiner Spezifikation lediglich die Segmentformate sowie den Aufbau der MPD-Datei. Viele weitere Aspekte wie beispielsweise Austausch der MPD, Codierung der Daten oder Verhalten bei der Bitratenadaption sind Gegenstand der jeweiligen Implementierung \cite{sodagar_mpeg-dash_2011}.
 
 % % % % % % % % % % % % % % % % % % % % % %
 
