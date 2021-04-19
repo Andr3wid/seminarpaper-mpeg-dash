@@ -60,13 +60,13 @@
 \begin{titlepage}
 
     \begin{center}
-        \includegraphics{images/logo.jpg} \\
+        \includegraphics[width=8cm]{images/logo_aau.png} \\
         \vspace{8mm}
-        \huge\textbf{Alpen-Adria Universität Klagenfurt} \\
+        \huge\textbf{Alpen-Adria-Universität Klagenfurt} \\
         \vspace{3mm}
         Fakultät für Technische Wissenschaften \\
         \vspace{3mm}
-        Institut für Angewandte Informatik \\
+        Institut für Informationstechnologie (ITEC)\\
         \vspace{3mm}
     \end{center}
     
@@ -86,7 +86,7 @@
     \begin{center}
         \Large\textbf{MPEG-DASH Standard} \\
         \vspace{2mm}
-        \normalsize Dynamic Adaptive Streaming Over HTTP
+        \normalsize Dynamic Adaptive Streaming over HTTP
     \end{center}
     
     \vspace{40mm}
@@ -96,7 +96,7 @@
         E-Mail: andrkogler@edu.aau.at \\
         Studienrichtung: Bachelorstudium Angewandte Informatik \\
         Matrikel-Nr.: 11702050\\
-        Datum: 09. April 2021
+        Datum: 17. April 2021
     \end{flushleft}
     
 \end{titlepage}
@@ -123,15 +123,19 @@
 \onehalfspacing
 
 \section*{Abstract}
-Wie der jährlich herausgegebene Cisco Visual Networking Index \cite{cisco_syst_inc_cisco_2017} zeigt steigt der Anteil von Videodaten im Internet rapide. Mit Ende 2021 sollen Videodaten 80\% des globalen Gesamtdatenvolumens ausmachen. \cite{cisco_syst_inc_cisco_2017}
+Wie der jährlich herausgegebene Cisco Visual Networking Index \cite{cisco_syst_inc_cisco_2017} zeigt, steigt der Anteil von Videodaten im Internet rapide. Mit Ende 2021 sollen Videodaten 80\% des globalen Gesamtdatenvolumens ausmachen \cite{cisco_syst_inc_cisco_2017}.
 
-Das bisher verbreitete \textit{Real-Time Transport Protocol} operiert unter der Annahme eines statischen IP-Netzwerks wohingegen in modernen Umgebungen Content Distribution Networks (CDNs) verwendet werden. Um diesem Problem und der Vielfalt an proprietären Streamingstandards zu entgegnen hat MPEG einen Standard für \textit{Dynamic Adaptive Streaming over HTTP}, auch bekannt als MPEG-DASH, entwickelt \cite{sodagar_mpeg-dash_2011}.
+Das vormals verbreitete \textit{Real-Time Transport Protocol} operiert unter der Annahme eines \textit{managed} IP-Netzwerks, wohingegen in modernen Umgebungen Content Distribution Networks (CDNs) verwendet werden \cite{sodagar_mpeg-dash_2011}. Während in managed IP-Netzwerken Server für die Verteilung der (Video-)Daten fest vorgegeben sind, können sich Server in CDNs dynamisch aufgrund einer Reihe von Kennzahlen regelmäßig ändern \cite{buyya_content_2008}. Um diesem Problem und der Vielfalt an proprietären Streamingstandards zu entgegnen, hat MPEG einen Standard für \textit{Dynamic Adaptive Streaming over HTTP}, auch bekannt als MPEG-DASH, entwickelt \cite{sodagar_mpeg-dash_2011}.
 
-Im Mittelpunkt steht dabei die dynamische Bitratenadaptierung der Videodaten je nach verfügbarer Bandbreite des Endgeräts. Da sich die verfügbare Bandbreite während der Wiedergabe des Videos ändern kann, müssen verschiedene Algorithmen zur dynamischen Selektion der Bitrate angewandt werden \cite{bentaleb_survey_2019}.
+Im Mittelpunkt steht dabei die dynamische Bitratenadaptierung der Videodaten je nach verfügbarer Bandbreite von Netzwerk und Endgerät. Da sich die verfügbare Bandbreite während der Wiedergabe des Videos ändern kann, müssen verschiedene Algorithmen zur dynamischen Selektion der Bitrate angewandt werden \cite{bentaleb_survey_2019}.
 
-Die eigentlichen Audio- und Video-Bitströme werden dabei in kleinere Segmente unterteilt welche wiederum in verschiedenen Qualitätsstufen für den Client zur Auswahl stehen. Jedes Segment besitzt eine eindeutige URL über die es mittels HTTP GET-Request angefragt werden kann. Alle verfügbaren Segment-URLs werden in der \textit{Multimedia Presentation Description (MPD)} angegeben. Durch Einlesen dieser XML-Datei am Anfang des Streamingprozesses lernt der Client über alle verfügbaren Qualitätsstufen und kann diese gemäß des verwendeten Algorithmus auswählen \cite{sodagar_mpeg-dash_2011}.
+Die eigentlichen Audio- und Video-Bitströme werden dabei in kleinere Segmente unterteilt welche wiederum in verschiedenen Qualitätsstufen für den Client zur Auswahl stehen. Jedes Segment besitzt eine eindeutige URL, über die es mittels HTTP GET-Request angefragt werden kann. Alle verfügbaren Segment-URLs werden in der \textit{Multimedia Presentation Description (MPD)} angegeben. Durch Einlesen dieser XML-Datei am Anfang des Streamingprozesses lernt der Client über alle verfügbaren Qualitätsstufen und kann diese gemäß des verwendeten Algorithmus auswählen \cite{sodagar_mpeg-dash_2011}.
 
-MPEG-DASH definiert in seiner Spezifikation lediglich die Segmentformate sowie den Aufbau der MPD-Datei. Viele weitere Aspekte wie beispielsweise Austausch der MPD, Codierung der Daten oder Verhalten bei der Bitratenadaption sind Gegenstand der jeweiligen Implementierung \cite{sodagar_mpeg-dash_2011}.
+MPEG-DASH definiert in seiner Spezifikation lediglich die Segmentformate, den Aufbau der MPD-Datei und die verpflichtende Verwendung von HTTP/1.1 \cite{mpeg_dynamic_2013}. Viele weitere Aspekte wie beispielsweise Austausch der MPD, Codierung der Daten oder Verhalten bei der Bitratenadaption sind Gegenstand der jeweiligen Implementierung \cite{sodagar_mpeg-dash_2011}.
+
+Diese Arbeit bietet einen Überblick zu MPEG-DASH allgemein, legt ihren Schwerpunkt jedoch auf durch den Standard vorgegebene Aspekte. 
+Nicht-standardisierte Teile werden konzeptuell eingeführt und anhand aktueller Lösungsbeispiele konkretisiert. Für Details wird an den jeweiligen Stellen auf tiefergehende Lektüre verwiesen.
+
 
 % % % % % % % % % % % % % % % % % % % % % %
 
@@ -139,7 +143,7 @@ MPEG-DASH definiert in seiner Spezifikation lediglich die Segmentformate sowie d
 % Literaturverzeichnis
 % % % % % % % % % % % % % % % % % % % % % %
 
-\printbibliography
+ \printbibliography
 
 \end{document}
 
