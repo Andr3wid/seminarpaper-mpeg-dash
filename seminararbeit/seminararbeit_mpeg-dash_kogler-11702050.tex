@@ -236,9 +236,49 @@ Sind beide Attribute nicht vorhanden werden die Starzeiten der jeweiligen Period
 \end{itemize}
 
 \subsubsection{<AdaptionSet>}
-\subsubsection{<Representation>}
-\subsubsection{<SegmentInfo>}
+Jedes Period-Element beinhält eines oder mehrere AdaptionSet-Elemente. Ein AdaptionSet beinhält inhaltlich gleiche \textit{Representation}-Elemente. Als \textit{inhaltlich gleich} wird in diesem Kontext verstanden, dass beinhalteten Representation-Elemente den gleichen Zeitabschnitt abdecken, jedoch verschiedene Versionen davon existieren die beispielsweise in deren Kodierung unterscheiden.
 
+Ein Beispiel dafür wären mehrere Audiospuren in verschiedenen Sprachen die den gleichen Dialog / Teil eines Dialogs abdecken oder ein Teil eines Videos in verschiedenen Auflösungen.
+
+Auch wenn es möglich ist verschiedene Medientypen (Audio, Video, Untertitel) in dem selben AdaptionSet anzugeben, werden AdaptionSets in der Praxis meist homogen gehalten. In einem solchen Fall kann der Medientyp mithilfe des \textbf{contentType}-Attributs für das gesamte AdaptionSet spezifiziert werden. Zulässige Werte sind nach IETF RFC 6838 zulässige \textit{Media-types}.
+
+Bei inhomogenen AdaptionSets müssen Inhalte durch \textbf{ContentComponent}-Elemente nach ihrem contentType kategorisierbar sein.
+
+\subsubsection{<Representation>}
+Ein Representation-Element beinhält eine Menge an Medieninhalten welche die Dauer des übergeordneten Period-Elements ab dem errechneten oder angegebenen Start des Period-Elements umfasst. 
+
+Jedes Representation-Element beinhält einen oder mehrere segmentierte Media-streams, wobei jeder stream eine kodierte Komponente (e.g. Audio, Video, Untertitel) repräsentiert. Folgende Attribute müssen für ein valides Representation-Element vorhanden sein:
+
+\begin{itemize}
+    \item \textbf{id:} Das id-Attribut muss innerhalb eines Period-Elements einzigartig sein, es sei denn ein funktional äquivalentes Representation-Element existiert innerhalb der Period.
+    \item \textbf{bandwidth:} Gibt die Bandbreite in Bits pro Sekunde (bps) an die für diese Qualitätsstufe empfohlen wird.
+\end{itemize}
+
+Represenation-Elemente können auch zusammengesetzte Media-streams beinhalten (zB Audio und Video in einem Strom). In diesem Fall werden \textbf{Sub-Representation}-Elemente eingeführt die Informationen über die enthaltenen Media-streams preisgeben.
+
+\subsubsection{Gemeinsame Attribute und Elemente}
+Eine Reihe von Attributen und Elementen kann sowohl auf der Ebene des AdaptionSets als auch in (Sub-)Representation-Elementen angegeben werden. Diese zusätzlichen Daten geben viel über die Natur der enthaltenen Segmente preis und sind großteils vom enthaltenen Medientyp abhängig.
+
+\begin{center}
+    \begin{tabular}{| c | c | c |}
+        \hline
+         \textbf{Attributname} & \textbf{Typ} & \textbf{Beschreibung} \\
+         \hline
+         width & video & horizontale Größe (Anzahl an Samples / Pixel) \\
+         \hline
+         height & video & vertikale Größe (Anzahl an Samples / Pixel) \\
+         \hline
+         sar & video & \textbf{s}ample \textbf{a}spect \textbf{r}atio; Seitenverhätlnis \\
+         \hline
+         audioSamplingRate & audio & Ganzzahl; Samples pro Sekunde \\
+         \hline
+         mimeType & alle & Muss zwingend in zumindest einem Element vorhanden sein. \\ 
+         \hline
+    \end{tabular}
+\end{center}
+
+\subsubsection{Segmente und Segmentinformationen}
+Informationen über die Segmente innerhalb eines Representation-Elements werden primär durch die Elemente \textbf{SegmentBase}, \textbf{SegmentList} und \textbf{SegmentTemplate} repräsentiert. Jedes der drei Elemente kann sowohl innerhalb einer Representation als auch innerhalb eines AdaptionSets oder einer Period vorkommen. Die letzteren beiden Ansätze werden für die Repräsentation von \textit{defaults} verwendet. Es darf nur eines der drei Elemente auf einer Ebene vorhanden sein.
 
 \subsubsection{Zeitangaben in MPDs}
 \label{iso8601_duration}
@@ -258,7 +298,7 @@ Designatoren mit vorstehender Null können auch ausgelassen werden. Beispiel:
 
 P3DT2H4M32S = 3 Tage, 2 Stunden, 4 Minuten, 32 Sekunden
 
-\subsubsection{}
+\subsubsection{Standard Test-MPD}
 
 \subsection{Segmentformate}
 Clause 6
