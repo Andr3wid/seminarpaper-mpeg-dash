@@ -21,6 +21,7 @@
 \usepackage{csquotes} % advanced facilities for inline and display quotations
 \usepackage{wrapfig} % Grafiken mit Text umfließen
 \usepackage{color}
+\usepackage{listings}
 
 \usepackage[style=ieee]{biblatex}
 \addbibresource{library.bib}
@@ -28,6 +29,12 @@
 \hypersetup{pdfborder={0 0 0}}
 \setkomafont{captionlabel}{\small\sffamily\bfseries}
 \addtokomafont{caption}{\small}
+
+% custom commands
+\def\attr#1{\texttt{#1}}
+\def\elem#1{\texttt{\textbf{#1}}}
+\lstnewenvironment{lstcode}
+                    {\lstset{frame=shadowbox, linewidth=10cm}}{}
 
 %% set heading and footer
 %% scrheadings default: 
@@ -59,46 +66,46 @@
 
 \begin{titlepage}
 
-    \begin{center}
-        \includegraphics[width=8cm]{images/logo_aau.png} \\
-        \vspace{8mm}
-        \huge\textbf{Alpen-Adria-Universität Klagenfurt} \\
-        \vspace{3mm}
-        Fakultät für Technische Wissenschaften \\
-        \vspace{3mm}
-        Institut für Informationstechnologie (ITEC)\\
-        \vspace{3mm}
-    \end{center}
-    
-    \vspace{5mm}
-    
-    \begin{center}
-        \textbf{Lehrveranstaltung: \\
-            Seminar aus Angewandte Informatik} \\
-        \vspace{2mm}
-        LV-Leiter: Univ.-Prof. Dipl.-Ing. Dr. Hermann Hellwagner \\
-        LV-Nr.: 622.000 \\
-        SS 2021
-    \end{center}
-    
-    \vspace{15mm}
-    
-    \begin{center}
-        \Large\textbf{MPEG-DASH Standard} \\
-        \vspace{2mm}
-        \normalsize Dynamic Adaptive Streaming over HTTP
-    \end{center}
-    
-    \vspace{40mm}
-    
-    \begin{flushleft}
-        \textbf{Andreas Kogler} \\
-        E-Mail: andrkogler@edu.aau.at \\
-        Studienrichtung: Bachelorstudium Angewandte Informatik \\
-        Matrikel-Nr.: 11702050\\
-        Datum: \today
-    \end{flushleft}
-    
+	\begin{center}
+		\includegraphics[width=8cm]{images/logo_aau.png} \\
+		\vspace{8mm}
+		\huge\textbf{Alpen-Adria-Universität Klagenfurt} \\
+		\vspace{3mm}
+		Fakultät für Technische Wissenschaften \\
+		\vspace{3mm}
+		Institut für Informationstechnologie (ITEC)\\
+		\vspace{3mm}
+	\end{center}
+
+	\vspace{5mm}
+
+	\begin{center}
+		\textbf{Lehrveranstaltung: \\
+			Seminar aus Angewandte Informatik} \\
+		\vspace{2mm}
+		LV-Leiter: Univ.-Prof. Dipl.-Ing. Dr. Hermann Hellwagner \\
+		LV-Nr.: 622.000 \\
+		SS 2021
+	\end{center}
+
+	\vspace{15mm}
+
+	\begin{center}
+		\Large\textbf{MPEG-DASH Standard} \\
+		\vspace{2mm}
+		\normalsize Dynamic Adaptive Streaming over HTTP
+	\end{center}
+
+	\vspace{40mm}
+
+	\begin{flushleft}
+		\textbf{Andreas Kogler} \\
+		E-Mail: andrkogler@edu.aau.at \\
+		Studienrichtung: Bachelorstudium Angewandte Informatik \\
+		Matrikel-Nr.: 11702050\\
+		Datum: \today
+	\end{flushleft}
+
 \end{titlepage}
 
 % % % % % % % % % % % % % % % % % % % % % %
@@ -133,7 +140,7 @@ Die eigentlichen Audio- und Video-Bitströme werden dabei in kleinere Segmente u
 
 MPEG-DASH definiert in seiner Spezifikation lediglich die Segmentformate, den Aufbau der MPD-Datei und die verpflichtende Verwendung von HTTP/1.1 \cite{mpeg_dynamic_2013}. Viele weitere Aspekte wie beispielsweise Austausch der MPD, Codierung der Daten oder Verhalten bei der Bitratenadaption sind Gegenstand der jeweiligen Implementierung \cite{sodagar_mpeg-dash_2011}.
 
-Diese Arbeit bietet einen Überblick zu MPEG-DASH allgemein, legt ihren Schwerpunkt jedoch auf durch den Standard vorgegebene Aspekte. 
+Diese Arbeit bietet einen Überblick zu MPEG-DASH allgemein, legt ihren Schwerpunkt jedoch auf durch den Standard vorgegebene Aspekte.
 Nicht-standardisierte Teile werden konzeptuell eingeführt und anhand aktueller Lösungsbeispiele konkretisiert. Für Details wird an den jeweiligen Stellen auf tiefergehende Lektüre verwiesen.
 
 \section{Warum Adaptives Streaming?}
@@ -142,7 +149,7 @@ Die Anzahl potentieller Endgeräte mit denen Menschen Videostreams konsumieren h
 Diese Endgeräte weisen unterschiedliche Charakteristiken auf, welche die Anforderungen an das Videoformat und dessen Übertragung stark beeinflussen. Vorrangig betrachten wir im Kontext von Videostreaming die Bildschirmgröße und Auflösung sowie die Verfügbare Bandbreite des Endgeräts und des Netzwerks.
 Es reicht also nicht ein Video in einer einzigen Version Serverseitig zu speichern. Während die Qualität für einen Full-HD Computerbildschirm völlig ausreichend sein könnte, würde sie auf einem 4k-TV aufgrund zu geringer Auflösung verschwomme angezeigt werden und wäre für einen Smartphone-Bildschirm unnötig groß. Letzteres lässt anmuten dass auch das Netzwerk eine zentrale Rolle im Videostreaming spielt.
 
-Smartphones, die mit steigender Tendenz einen Großteil des globalen Internettraffics ausmachen, sind zu einem Großteil über das Mobilfunknetz an das Internet angebunden. Hier kann es insbesondere zu Schwankungen in der verfügbaren Bandbreite am Endgerät und im Netzwerk kommen. Ein Einbruch der verfügbaren Bandbreite führt zu Pufferwartezeiten bei der Wiedergabe, was die QoE (Quality of Experience) wiederum stark negativ beeinflusst. 
+Smartphones, die mit steigender Tendenz einen Großteil des globalen Internettraffics ausmachen, sind zu einem Großteil über das Mobilfunknetz an das Internet angebunden. Hier kann es insbesondere zu Schwankungen in der verfügbaren Bandbreite am Endgerät und im Netzwerk kommen. Ein Einbruch der verfügbaren Bandbreite führt zu Pufferwartezeiten bei der Wiedergabe, was die QoE (Quality of Experience) wiederum stark negativ beeinflusst.
 
 Dieser Umstand führte schließlich zur Idee des adaptiven Videostreamings. Ein Konzept in dem die Bitrate des zu übertragenden Videos während der Wiedergabe dynamisch an die Netzwerkgegebenheiten angepasst (adaptiert) wird. Das führt bei Netzwerkengpässen zwar dazu dass Teile des konsumierten Videos mit geringerer Qualität wiedergegeben werden, vermeidet allerdings gefürchtete Pufferwartezeiten und beeinträchtigt die QoE für den Benutzer nur marginal.
 
@@ -150,14 +157,14 @@ Dieser Umstand führte schließlich zur Idee des adaptiven Videostreamings. Ein 
 Adaptives Streaming ist grundsätzlich ein generelles Konzept und keine konkrete Technologie. Zur konkreten Umsetzung haben sich in den letzten Jahren zwei große Standards gebildet. Einerseits wurde von Apple das proprietäre Protokoll HLS (HTTP Live Streaming) entwickelt, während die Moving Pictures Expert Group (MPEG) den offenen Standard MPEG-DASH (Dynamic Adaptive Streaming over HTTP) entwickelt hat. Der DASH-Standard wurde 2012 offiziell von MPEG unter der ISO/IEC-Nummer 23009 veröffentlicht und besteht aus acht Parts:
 
 \begin{itemize}
-    \item \textbf{Part 1:} Media presentation description and segment formats
-    \item \textbf{Part 2:} Reference software and conformance
-    \item \textbf{Part 3:} Implementation guidelines
-    \item \textbf{Part 4:} Format Independent Segment encryption and authentication
-    \item \textbf{Part 5:} Server and network assisted DASH (SAND)
-    \item \textbf{Part 6:} DASH with Server Push and WebSockets
-    \item \textbf{Part 7:} Delivery of CMAF content with DASH
-    \item \textbf{Part 8:} Session based DASH operation
+	\item \textbf{Part 1:} Media presentation description and segment formats
+	\item \textbf{Part 2:} Reference software and conformance
+	\item \textbf{Part 3:} Implementation guidelines
+	\item \textbf{Part 4:} Format Independent Segment encryption and authentication
+	\item \textbf{Part 5:} Server and network assisted DASH (SAND)
+	\item \textbf{Part 6:} DASH with Server Push and WebSockets
+	\item \textbf{Part 7:} Delivery of CMAF content with DASH
+	\item \textbf{Part 8:} Session based DASH operation
 \end{itemize}
 
 HLS wurde 2009 von Apple veröffentlicht.
@@ -165,15 +172,15 @@ HLS wurde 2009 von Apple veröffentlicht.
 Beide Technologien setzen für die Übertragung auf der Applikationsebene das Hyper Text Transfer Protocol (HTTP) ein. Beide Protokolle werden von einer weiten Palette an Endgeräten unterstützt. Ausnahme ist die Unterstützung bei Apple Geräten. Der Safari-Browser, welcher bei iPhone, iPad, Mac und AppleTV als Standard ausgeliefert wird, unterstützt nativ kein MPEG-DASH sondern nur den hauseigenen HLS-Standard.
 
 \section{Einführung in MPEG-DASH}
-Um adaptives Streaming via MPEG-DASH zu ermöglichen wird die Mediendatei zunächst in mehrere, kleine Segmente zwischen zwei und zehn Sekunden Länge aufgeteilt. Jedes dieser Segmente wird anschließend in verschiedenen Qualitätsstufen kodiert. Segmente in einer höheren Qualitätsstufe benötigen mehr Speicherplatz und später auch mehr Bandbreite bei der Übertragung. Die so entstandenen Segmente werden schließlich auf einen Webserver hochgeladen, wo sie mittels HTTP GET-Requests angefragt werden können. 
+Um adaptives Streaming via MPEG-DASH zu ermöglichen wird die Mediendatei zunächst in mehrere, kleine Segmente zwischen zwei und zehn Sekunden Länge aufgeteilt. Jedes dieser Segmente wird anschließend in verschiedenen Qualitätsstufen kodiert. Segmente in einer höheren Qualitätsstufe benötigen mehr Speicherplatz und später auch mehr Bandbreite bei der Übertragung. Die so entstandenen Segmente werden schließlich auf einen Webserver hochgeladen, wo sie mittels HTTP GET-Requests angefragt werden können.
 
-Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserver. Um dem Client einen Überblick über die verfügbaren Qualitätsstufen des angefragten Videos zu bieten wird vom Server zu Beginn die \textit{Media Presentation Description}, kurz \textit{MPD}, bereitgestellt. Ein Teil der Clientsoftware misst permanent die zur Verfügung stehende Bandbreite und bestimmt so in welcher Qualitätsstufe ein Segment angefragt wird. Dieser Teil der Software wird \textit{Bitrate Adaption Algorithm} genannt. 
+Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserver. Um dem Client einen Überblick über die verfügbaren Qualitätsstufen des angefragten Videos zu bieten wird vom Server zu Beginn die \textit{Media Presentation Description}, kurz \textit{MPD}, bereitgestellt. Ein Teil der Clientsoftware misst permanent die zur Verfügung stehende Bandbreite und bestimmt so in welcher Qualitätsstufe ein Segment angefragt wird. Dieser Teil der Software wird \textit{Bitrate Adaption Algorithm} genannt.
 
 \begin{center}
-    \begin{figure}
-        \includegraphics[width=14cm]{images/adaptive-streaming-basic.png}
-        \caption{https://bitmovin.com/dynamic-adaptive-streaming-http-mpeg-dash/}
-    \end{figure}
+	\begin{figure}
+		\includegraphics[width=14cm]{images/adaptive-streaming-basic.png}
+		\caption{https://bitmovin.com/dynamic-adaptive-streaming-http-mpeg-dash/}
+	\end{figure}
 \end{center}
 
 
@@ -188,11 +195,11 @@ Eine MPD-Datei dient als \textit{Inhaltsverzeichnis} für den Client, bietet ein
 Die Dateistruktur wird strikt durch den Standard vorgegeben. MPD-Dateien folgen einem durch den Standard vorgegebenen XML-Schema. Folgende Grafik veranschaulicht die wichtigsten Komponenten einer MPD auf die in den kommenden Kapiteln näher eingegangen wird:
 
 \begin{center}
-    \begin{figure}[h!]
-        \includegraphics[width=12cm]{images/mpd-structure.png}
-        % https://www.bogotobogo.com/VideoStreaming/images/mpeg_dash/MPEG-DASH-Tutorial.pdf
-        \caption{Quelle siehe Kommentar}
-    \end{figure}
+	\begin{figure}[h!]
+		\includegraphics[width=12cm]{images/mpd-structure.png}
+		% https://www.bogotobogo.com/VideoStreaming/images/mpeg_dash/MPEG-DASH-Tutorial.pdf
+		\caption{Quelle siehe Kommentar}
+	\end{figure}
 \end{center}
 
 \textbf{Notiz:} Es werden pro Abschnitt nur Attribute und Sub-Elemente besprochen die laut ISO/IEC 23009-1 als \textit{Mandatory}, also unbedingt notwendig, gekennzeichnet sind oder dem Zweck eines anschaulichen Beispiels dienen. Für eine vollständige Übersicht wird auf den offiziellen Standard ISO/IEC 23009 Part 1 (Media Presentation Description and Segment formats) verwiesen.
@@ -200,22 +207,22 @@ Die Dateistruktur wird strikt durch den Standard vorgegeben. MPD-Dateien folgen 
 \subsubsection{XML-Schema}
 
 \subsubsection{Root-Element <MPD>}
-Jede MPD besitzt genau ein einziges <MPD>-Tag als Root-Element welches auf die XML-Deklaration in der ersten Zeile und der Einbindung des Schemas / Angabe des Namespaces folgt. 
+Jede MPD besitzt genau ein einziges <MPD>-Tag als Root-Element welches auf die XML-Deklaration in der ersten Zeile und der Einbindung des Schemas / Angabe des Namespaces folgt.
 Folgende Attribute sind für ein valides MPD-Tag zwingend notwendig:
 
 \begin{itemize}
-    \item \textbf{profiles}: Listet die unterstützten Medienprofile auf. Eine Übersicht über verfügbare Profile sowie deren Notation werden in Abschnitt \ref{profiles} behandelt.
-    \item \textbf{minBufferTime}: Minimiale Zeitdauer an Segmenten die ein Client im Puffer bereithalten muss um Playback starten zu können. Angabe als ISO 8601-Duration. Details zum Format im Abschnitt \ref{iso8601_duration}.
+	\item \textbf{profiles}: Listet die unterstützten Medienprofile auf. Eine Übersicht über verfügbare Profile sowie deren Notation werden in Abschnitt \ref{profiles} behandelt.
+	\item \textbf{minBufferTime}: Minimiale Zeitdauer an Segmenten die ein Client im Puffer bereithalten muss um Playback starten zu können. Angabe als ISO 8601-Duration. Details zum Format im Abschnitt \ref{iso8601_duration}.
 \end{itemize}
 
 Direkt unter dem Root-Tag können außerdem BaseURL-Elemente spezifiziert werden. Eine BaseURL kann alternative URLs für Mediendaten liefern.
 Die Basis-URL wird gemäß IETF RFC3986 (5.1.1 - 5.1.4) eruiert. Wird mit folgenden Schritten versucht eine Basis-URL zu finden:
 
 \begin{enumerate}
-    \item Ein BaseURL-Element verweist auf eine absolute URL.
-    \item Ein anderes gekapseltes Element verweist auf eine absolute URL. TOCHECK?
-    \item Die URL welche benutzt wurde um die MPD anzufragen wird als Basis-URL gewählt.
-    \item Die Applikation welche die MPD angefragt hat, bietet eine Standard Basis-URL an.
+	\item Ein BaseURL-Element verweist auf eine absolute URL.
+	\item Ein anderes gekapseltes Element verweist auf eine absolute URL. TOCHECK?
+	\item Die URL welche benutzt wurde um die MPD anzufragen wird als Basis-URL gewählt.
+	\item Die Applikation welche die MPD angefragt hat, bietet eine Standard Basis-URL an.
 \end{enumerate}
 
 Kann nach dieser Vorgehensweise keine Basis-URL bestimmt werden, wird das MPD nicht geparsed und als fehlerhaft abgewiesen.
@@ -225,14 +232,14 @@ Jede MPD besitzt zumindest ein oder mehrere Period-Elemente die dazu verwendet w
 
 Period-Elemente besitzen nur optionale Attribute von denen zwei gängige dennoch erwähnt werden sollen:
 \begin{itemize}
-    \item \textbf{start:} Wird verwendet um jedes Mediensegment einem Zeitpunkt auf der Zeitleiste zuzuordnen.
-    \item \textbf{duration:} Wird verwendet um die Startzeit des nächsten Period-Elements zu berechnen.
+	\item \textbf{start:} Wird verwendet um jedes Mediensegment einem Zeitpunkt auf der Zeitleiste zuzuordnen.
+	\item \textbf{duration:} Wird verwendet um die Startzeit des nächsten Period-Elements zu berechnen.
 \end{itemize}
 
 Sind beide Attribute nicht vorhanden werden die Starzeiten der jeweiligen Period-Elemente wie folgt errechnet:
 
 \begin{itemize}
-    \item TODO
+	\item TODO
 \end{itemize}
 
 \subsubsection{<AdaptionSet>}
@@ -245,13 +252,13 @@ Auch wenn es möglich ist verschiedene Medientypen (Audio, Video, Untertitel) in
 Bei inhomogenen AdaptionSets müssen Inhalte durch \textbf{ContentComponent}-Elemente nach ihrem contentType kategorisierbar sein.
 
 \subsubsection{<Representation>}
-Ein Representation-Element beinhält eine Menge an Medieninhalten welche die Dauer des übergeordneten Period-Elements ab dem errechneten oder angegebenen Start des Period-Elements umfasst. 
+Ein Representation-Element beinhält eine Menge an Medieninhalten welche die Dauer des übergeordneten Period-Elements ab dem errechneten oder angegebenen Start des Period-Elements umfasst.
 
 Jedes Representation-Element beinhält einen oder mehrere segmentierte Media-streams, wobei jeder stream eine kodierte Komponente (e.g. Audio, Video, Untertitel) repräsentiert. Folgende Attribute müssen für ein valides Representation-Element vorhanden sein:
 
 \begin{itemize}
-    \item \textbf{id:} Das id-Attribut muss innerhalb eines Period-Elements einzigartig sein, es sei denn ein funktional äquivalentes Representation-Element existiert innerhalb der Period.
-    \item \textbf{bandwidth:} Gibt die Bandbreite in Bits pro Sekunde (bps) an die für diese Qualitätsstufe empfohlen wird.
+	\item \textbf{id:} Das id-Attribut muss innerhalb eines Period-Elements einzigartig sein, es sei denn ein funktional äquivalentes Representation-Element existiert innerhalb der Period.
+	\item \textbf{bandwidth:} Gibt die Bandbreite in Bits pro Sekunde (bps) an die für diese Qualitätsstufe empfohlen wird.
 \end{itemize}
 
 Represenation-Elemente können auch zusammengesetzte Media-streams beinhalten (zB Audio und Video in einem Strom). In diesem Fall werden \textbf{Sub-Representation}-Elemente eingeführt die Informationen über die enthaltenen Media-streams preisgeben.
@@ -260,25 +267,53 @@ Represenation-Elemente können auch zusammengesetzte Media-streams beinhalten (z
 Eine Reihe von Attributen und Elementen kann sowohl auf der Ebene des AdaptionSets als auch in (Sub-)Representation-Elementen angegeben werden. Diese zusätzlichen Daten geben viel über die Natur der enthaltenen Segmente preis und sind großteils vom enthaltenen Medientyp abhängig.
 
 \begin{center}
-    \begin{tabular}{| c | c | c |}
-        \hline
-         \textbf{Attributname} & \textbf{Typ} & \textbf{Beschreibung} \\
-         \hline
-         width & video & horizontale Größe (Anzahl an Samples / Pixel) \\
-         \hline
-         height & video & vertikale Größe (Anzahl an Samples / Pixel) \\
-         \hline
-         sar & video & \textbf{s}ample \textbf{a}spect \textbf{r}atio; Seitenverhätlnis \\
-         \hline
-         audioSamplingRate & audio & Ganzzahl; Samples pro Sekunde \\
-         \hline
-         mimeType & alle & Muss zwingend in zumindest einem Element vorhanden sein. \\ 
-         \hline
-    \end{tabular}
+	\begin{tabular}{| c | c | c |}
+		\hline
+		\textbf{Attributname} & \textbf{Typ} & \textbf{Beschreibung}                                            \\
+		\hline
+		\hline
+		width                 & video        & horizontale Größe (Anzahl an Samples / Pixel)                    \\
+		\hline
+		height                & video        & vertikale Größe (Anzahl an Samples / Pixel)                      \\
+		\hline
+		sar                   & video        & \textbf{s}ample \textbf{a}spect \textbf{r}atio; Seitenverhätlnis \\
+		\hline
+		audioSamplingRate     & audio        & Ganzzahl; Samples pro Sekunde                                    \\
+		\hline
+		mimeType              & alle         & Muss zwingend in zumindest einem Element vorhanden sein.         \\
+		\hline
+	\end{tabular}
 \end{center}
 
 \subsubsection{Segmente und Segmentinformationen}
-Informationen über die Segmente innerhalb eines Representation-Elements werden primär durch die Elemente \textbf{SegmentBase}, \textbf{SegmentList} und \textbf{SegmentTemplate} repräsentiert. Jedes der drei Elemente kann sowohl innerhalb einer Representation als auch innerhalb eines AdaptionSets oder einer Period vorkommen. Die letzteren beiden Ansätze werden für die Repräsentation von \textit{defaults} verwendet. Es darf nur eines der drei Elemente auf einer Ebene vorhanden sein.
+Informationen über die Segmente innerhalb eines Representation-Elements werden primär durch die Elemente \textbf{SegmentBase}, \textbf{SegmentList} und \textbf{SegmentTemplate} repräsentiert. Jedes der drei Elemente kann sowohl innerhalb einer Representation als auch innerhalb eines AdaptionSets oder einer Period vorkommen. Die letzteren beiden Ansätze werden für die Repräsentation von \textit{defaults}, also allgemeingültigen Werten, verwendet. Es darf nur eines der drei Elemente auf einer Ebene vorhanden sein.
+
+\begin{itemize}
+	\item \textbf{SegmentBase} bietet nur dann ausreichend Segmentinformation wenn jede Representation ein einziges Segment beinhält.
+	\item \textbf{SegmentList}-Elemente beinhalten ein oder mehrere \textbf{SegmentURL}-Elemente die mittels des \textit{media}-Attributs auf den Dateinamen des jeweiligen Segments verweisen. Optional kann auch ein \textit{mediaRange}-Attribut angegeben werden, welches die Byte-Range angibt die durch das \textit{media}-Attribut referenziert wird.
+	\item Wenn sich Segment-URLs eine gemeinsame Struktur teilen, können diese mithilfe eines \elem{SegmentTemplate}-Elements dargestellt werden. In diesem Fall beinhält \attr{media} ein URL-Template mit Ersetzungsidentifikatoren aus dem alle Segment-URLs generiert werden. Einige Beispiele dafür sind in Tabelle \ref{template_substitutions} angegeben. 
+\end{itemize}
+
+\begin{center}
+	\begin{table}[ht]
+        \centering
+		\label{template_substitutions}
+		\begin{tabular}{| c | c |}
+			\hline
+			\textbf{Identifikator}        & \textbf{wird ersetzt durch ...}                     \\
+			\hline
+			\hline
+			\textit{\$RepresentationID\$} & \attr{id}-Attribut von \elem{Representation}        \\
+			\hline
+			\textit{\$Number\$}           & jeweilige Segmentnummer                             \\
+			\hline
+			\textit{\$Bandwidth\$}        & \attr{bandwidth}-Attribut von \elem{Representation} \\
+			\hline
+		\end{tabular}
+        \caption{Beispiele für Ersetzungsidentifikatoren in SegmentTemplates}
+	\end{table}
+\end{center}
+
 
 \subsubsection{Zeitangaben in MPDs}
 \label{iso8601_duration}
@@ -289,18 +324,92 @@ Jegliche Zeitangaben halten sich an ISO 8601, dem \textit{Data elements and inte
 P wird als \textit{Duration Designator} bezeichnet und kennzeichnet den Start einer ISO 8601-konformen Angabe von Zeitdauer. Angaben der Dauer können aus einem \textit{date} und einem \textit{time}-Teil bestehen. Im date-Teil werden Jahre, Wochen, Monate und Tage notiert. Der time-Teil beinhält Stunden, Minuten und Sekunden. Getrennt werden beide Teile durch ein T. Die Standarddesignatoren für den jeweiligen Abschnitt sehen dabei wie folgt aus:
 
 \begin{center}
-    \begin{tabular}{c c c}
-         Description & goes & here
-    \end{tabular}
+    \begin{table}[ht]
+        \label{iso_duration_designators}
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+                \textbf{Designator} & \textbf{Typ} & \textbf{Beschreibung} \\
+            \hline
+            \hline
+            Y & date & Jahre \\
+            \hline
+            M & date & Monate \\
+            \hline
+            W & date & Wochen \\
+            \hline
+            D & date & Tage \\
+            \hline
+            \hline
+            H & time & Stunden \\
+            \hline
+            M & time & Minuten \\
+            \hline
+            S & time & Sekunden \\
+            \hline
+        \end{tabular}
+        \caption{Designatoren für ISO 8601 Zeitspannen}
+    \end{table}
 \end{center}
-
-Designatoren mit vorstehender Null können auch ausgelassen werden. Beispiel:
+Designatoren mit vorstehender Null können auch ausgelassen werden. Beispiele:
 
 P3DT2H4M32S = 3 Tage, 2 Stunden, 4 Minuten, 32 Sekunden
 
-\subsubsection{Standard Test-MPD}
+PT1M40S = 1 Minute, 40 Sekunden
+
+\subsubsection{Beispiel - MPD}
+ Die Firma Bitmovin bietet öffentlich eine Media Presentation Description \footnote{\url{https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd}} für Testzwecke an. Diese wird hier verwendet um die besprochenen Elemente in einen praktischen Kontext zu setzen.
+
+\begin{lstlisting}[language=XML,basicstyle=\tiny]
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<MPD id="f08e80da-bf1d-4e3d-8899-f0f6155f6efa" profiles="urn:mpeg:dash:profile:isoff-main:2011"
+type="static" availabilityStartTime="2015-08-04T09:33:14.000Z" publishTime="2015-08-04T10:47:32.000Z"
+ mediaPresentationDuration="P0Y0M0DT0H3M30.000S" minBufferTime="P0Y0M0DT0H0M1.000S" 
+ bitmovin:version="1.6.0" xmlns:ns2="http://www.w3.org/1999/xlink" 
+ xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:bitmovin="http://www.bitmovin.net/mpd/2015">
+
+    <Period>
+        <AdaptationSet mimeType="video/mp4" codecs="avc1.42c00d">
+            <SegmentTemplate media="../video/$RepresentationID$/dash/segment_$Number$.m4s" 
+            initialization="../video/$RepresentationID$/dash/init.mp4" duration="100000" 
+            startNumber="0" timescale="25000"/>
+            <Representation id="180_250000" bandwidth="250000" width="320" height="180" 
+                frameRate="25"/>
+            <Representation id="270_400000" bandwidth="400000" width="480" height="270"  
+                frameRate="25"/>
+            <Representation id="360_800000" bandwidth="800000" width="640" height="360" 
+                frameRate="25"/>
+            <Representation id="540_1200000" bandwidth="1200000" width="960" height="540"  
+                frameRate="25"/>
+            <Representation id="720_2400000" bandwidth="2400000" width="1280" height="720"  
+                frameRate="25"/>
+            <Representation id="1080_4800000" bandwidth="4800000" width="1920" height="1080" 
+                frameRate="25"/>
+        </AdaptationSet>
+        <AdaptationSet lang="en" mimeType="audio/mp4" codecs="mp4a.40.2" bitmovin:label="English stereo">
+            <AudioChannelConfiguration 
+                schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+            <SegmentTemplate media="../audio/$RepresentationID$/dash/segment_$Number$.m4s" 
+                initialization="../audio/$RepresentationID$/dash/init.mp4" duration="191472" 
+                startNumber="0" timescale="48000"/>
+            <Representation id="1_stereo_128000" bandwidth="128000" audioSamplingRate="48000"/>
+        </AdaptationSet>
+    </Period>
+</MPD>
+\end{lstlisting}
+
+Im Root-Tag der gelisteten MPD wird eine minimale Pufferzeit von einer Sekunde angegeben. Die Datei besteht nur aus einer einzigen \elem{Period} die die gesamte Dauer des Videos umfasst, listet jedoch zwei verschiedene \elem{AdaptionSet}s. 
+
+Anhand des \attr{mimeType}s lässt sich erkennen dass es sich bei ersterem \elem{AdaptionSet} um Videodaten handelt. Außerdem verrät das \attr{codec}-Attribut dass die Daten mit H.264 kodiert wurden. Eine Liste der zulässigen Parameter für \attr{codec} findet sich im RFC 6381. Für eine Reihe verschiedener Auflösungen und Bitraten finden sich in dem \elem{AdaptionSet} unterschiedliche \elem{Representation}s.
+
+Das zweite \elem{AdaptionSet} beinhält die zugehörigen Audiodaten, welche mithilfe von MP4-Audio (\textbf{A}dvanced \textbf{A}udio \textbf{C}oding) kodiert wurden.
+
+Beide \elem{AdaptionSet}s verwenden für die Auflösung der URL zu den jeweiligen Segmentdaten \elem{SegmentTemplate}s mit den besprochenen Ersetzungsidentifikatoren. Wie in \ref{segment_formats} erwähnt wird, wird zu Beginn des Streams ein Initialisierungssegment gesendet welches von der Engine die die Mediendaten verarbeiten / abspielen soll verarbeitet wird. Dieses Segment wird praktisch gerne von den restlichen Mediensegmenten separat behandelt. Aus diesem Grund kann mit \attr{initialization} ein dediziertes URL-Template für das Initialisierungssegment angelegt werden.
+
 
 \subsection{Segmentformate}
+\label{segment_formats}
 Clause 6
 
 \subsection{Profile}
@@ -309,7 +418,7 @@ Clause 8
 
 \subsection{Algorithmen zur Bitratenadapierung}
 
-Nicht im DASH-Standard enthalten. 
+Nicht im DASH-Standard enthalten.
 
 \subsection{Encoding?}
 
@@ -324,7 +433,7 @@ Nicht im DASH-Standard enthalten.
 % Literaturverzeichnis
 % % % % % % % % % % % % % % % % % % % % % %
 
- \printbibliography
+\printbibliography
 
 \end{document}
 
