@@ -416,7 +416,7 @@ IBMFF wurde als MPEG-4 Part 12 veröffentlicht und definiert Vorgaben eines gene
 
 MPEG-2 TS hingegen wurde für die Übertragung von Medienströmen über unsichere Medien (zB Broadcasts über Satellit) entworfen. Aufgrund der unsicheren Natur des Übertragungsmediums wird verstärkt Fokus auf Fehlerkorrektur und Synchronisation gelegt. MPEG-2 TS finden vorallem im Digitalfernsehen Anwendung und wird mitunter bei DVB und IPTV verwendet. MPEG-2 TS basierende Segmente verarbeiten \textit{Packets}, welche wiederum in \textit{Header} und \textit{Payload} unterteilt werden.
 
-DASH unterscheidet zwischen vier verschiedenen Segmenttypen die je nach zugrundeliegendem Containerformat unterschiedlich strukturiert sind.
+DASH unterscheidet zwischen verschiedenen Segmenttypen die je nach zugrundeliegendem Containerformat unterschiedlich strukturiert sind.
 
 \subsubsection{Initialization Segments}
 Das Initialisierungssegment beinhält keine kodierten Mediendaten sondern nur Metadaten die Aussagen über die Nutzdaten des zu verarbeitenden Medienstroms treffen. Mit diesen Metadaten sollte die verarbeitende Software in der Lage sein alle Folgesegmente richtig zu dekodieren.
@@ -444,34 +444,50 @@ Im Fall von IBMFF wird zwischen vier Typen von Mediensegmenten unterschieden:
 
 \begin{itemize}
 	\item \textbf{Delivery Unit Media Segment} bilden die Grundlage für alle weiteren Segmenttypen. Jedes Segment besitzt eines oder mehrere \textit{Movie Fragments} die wiederum aus einer \attr{moof}- und einer \attr{mdat}-Box bestehen. Ersteres beinhält Metadaten über das Fragment, zweiteres beinhält die eigentlichen, kodierten Mediendaten. Movie Fragments müssen \textit{self-contained} sein. Das bedeutet dass keine Referenzen auf Daten außerhalb des eigenen Segments verwendet werden dürfen. Erkennbar sind Delivery Unit Media Segments an der \textit{Segment Type}-Box \attr{stype}, welche den Wert \attr{dums} aufweist.
-	\item \textbf{Simple format type} 
-	\item \textbf{Indexed Media Segment}:
-	\item \textbf{Random Access Media Segment}:
+	\item \textbf{Simple format type} ist über den \attr{styp} \attr{'msdh'} erkennbar und muss alle Anforderungen für ein Delivery Unit Segment erfüllen. Weiters können eine oder mehrere \attr{sidx}-Box(en) (Segment Index) vorhanden sein und vor der ersten \attr{moof}-Box platziert werden. Zudem muss jedes \textit{Track Fragment} (\attr{traf}) eine \textit{Track Fragment Decode Time} (\attr{tfdt}) enthalten.
+	\item \textbf{Indexed Media Segment}s können über den \attr{stype} \attr{'msix'} identifiziert werden und basieren ebenfalls auf den Vorgaben für Delivery Unit Segmente. Zudem wird jede \attr{moof}-Box direkt von der zugehörigen \attr{mdat}-Box gefolgt. Die Präsenz von \attr{sidx}-Boxen wie im \textit{Simple format type} ist nicht optional.
+	\item \textbf{Random Access Media Segment}s erfüllen die Anforderung des \textit{Simple format type}s und beinhalten genug Information (zB Verschlüsselungsinformation) um in Kombination mit dem Initialisierungssegment den Medienstrom wiedergeben zu können.
 \end{itemize}
 
 MPEG-2 TS unterscheidet grundsätzlich nur zwischen zwei Typen von Mediensegmenten:
 \begin{itemize}
-	\item \textbf{Basic Media Segment}: ... . \textit{Basic Media Segments} können außerdem selbstinitialiserend sein und/oder Information zur Verschlüsselung von Folgepaketen beinhalten.
-	\item \textbf{Bitstream Switching Segment}:
+	\item Ein \textbf{Basic Media Segment} besteht nur aus vollständigen MPEG-2 TS Paketen in denen genau ein Programm definiert ist und darf nicht von Initialisierungsinformation abhängig sein, die erst in darauffolgenden Segmenten verfügbar ist. \textit{Basic Media Segments} können außerdem selbstinitialiserend sein und/oder Information zur Verschlüsselung von Folgepaketen beinhalten.
+	\item \textbf{Bitstream Switching Segment}s sollen keine Mediendaten beinhalten. Sie werden verwendet wenn der jeweilige Player auf eine \elem{Representation} wechselt die abweichende Initialisierungsdaten beinhält. In diesem Fall werden die Initialisierungsinformationen aus den Switching-Segmenten gewonnen.
 \end{itemize}
 
 Mediendaten können nicht abgespielt werden solange das Initialisierungssegment nicht heruntergeladen und verarbeitet wurde was die Vorlaufzeit für den Beginn des Playbacks negativ beeinträchtigt. Aus diesem Grund wurden selbstinitialisierende Mediensegmente eingeführt, die an ihrem \attr{ftyp} 'dsms' erkennbar sind. Die Abkürzung steht für \textit{DASH Self-Initializing Media Segment}.
 
 \subsubsection{Index Segments}
-Indexsegmente enthalten Indexinformation über die Mediensegmente des Streams. Diese wird verwendet um 
+Indexsegmente enthalten Indexinformation über die Mediensegmente des Streams und werden immer als Sequenz vom IBMFF-Boxen repräsentiert. Für die Zusammenarbeit in MPEG-2 TS existieren Box-Typen die speziell für diesen Fall geschaffen wurden.
+Mithilfe eines Indexsegments kann effizient auf darauffolgende Mediensegmente zugegriffen werden. Das wird mithilfe der Angabe von Byte-Offsets in Verbindung mit dem jeweiligen Segment-Index (\attr{sidx}) erreicht.
 
-\subsubsection{Bitstream Switching Segments}
-\textit{Bitstream-Switching}-Segmente enthalten Daten die benötigt werden wenn auf eine andere \elem{Representation} gewechselt wird.
+Ein Indexsegment kann entweder ein einzelnes Mediensegment oder alle Segmente einer \elem{Representation} indexieren.
 
-\subsubsection{Segment Indexes}
-Jedes Mediensegment kann außerdem einen Segment-Index besitzen. IBMFF realisiert dies mithilfe einer dediziert \attr{sidx}-Box. MPEG-2 TS nutzt den \attr{PID}-Wert (\textbf{P}rogram \textbf{ID}) für den Segment Index.
+Jedes Mediensegment kann außerdem einen Segment-Index besitzen. IBMFF realisiert dies mithilfe einer dediziert \attr{sidx}-Box. MPEG-2 TS nutzt den \attr{PID}-Wert (\textbf{P}rogram \textbf{ID}) für den Segment Index. 
 
-TODO: Wie kann auf diesen in der MPD referenziert werden ?
+\subsection{Media Presentation Timeline}
+Ein zentrales Konzept in DASH ist die \textit{Media Presentation Timeline}. Dabei handelt es sich um eine globale, innerhalb einer MPD gültige Timeline die Synchronisation von verschiedenen Medienkomponenten erleichtert. Sämtliche Komponenten in allen potentiell unterschiedlich kodierten Versionen orientieren sich an dieser Timeline.
+
+Durch dieses Modell müssen Elemente nicht mehr mit einer aufsteigenden ID versehen werden in der korrekten Reihenfolge abgespielt zu werden. Stattdessen werden die Segmente mit timestamps versehen, die deren Position an der globalen Media Presentation Timeline festlegen.
 
 
 \subsection{Profile}
 \label{profiles}
-Clause 8
+DASH unterstützt unterschiedliche Profile mit deren Hilfe Rückschluss auf verwendete Features geschlossen werden kann. Die unterstützten Profile können im MPD-Root-Tag als kommaseparierte Liste aufgeführt werden.
+
+Je nach Profil existieren unterschiedliche Restriktionen im Bezug auf MPD und Segmentformate welche für alle angegebenen Profile erfüllt sein müssen um als valide zu gelten.
+
+Profile können wieder je nach verwendetem Segmentformat in zwei Kategorien eingeteilt werden. (IBMFF oder MPEG-2 TS)
+
+\begin{itemize}
+	\item \textbf{Full (\attr{urn:mpeg:dash:profile:full:2011})}: Alle Features und Segmenttypen des Standards werden unterstützt. Alle weiteren Profile unterstützen eine Teilmenge der Features die vom \textit{full}-Profil umfasst werden.
+	\item \textbf{IBMFF On Demand (\attr{urn:mpeg:dash:profile:isoff-on-demand:2011})}: On-Demand Medien liegen zum Zeitpunkt des Abrufs bereits vollständig vor. D.h. dass im Gegensatz zu Live-Medien kein Inhalt mehr zusätzlich generiert wird. Haupteinschränkung in diesem Profil ist, dass \elem{Representation}s nur durch ein einziges Segment dargestellt werden dürfen. Dadurch wird die Verwendung von \elem{SegmentList} und \elem{SegmentTemplate} ausgeschlossen. Das \attr{type}-Attribut in \elem{MPD} muss außerdem den Wert \attr{'static'} aufweisen. Genauere Ausführungen können im Standard nachgelesen werden.
+	\item \textbf{IBMFF Live (\attr{urn:mpeg:dash:profile:isoff-live:2011)}}: Um die Latenz für den Live-Einsatz möglichst niedrig zu halten, werden Segmente von sehr kurzer Dauer erzeugt. Diese lassen sich schneller kodieren. Außerdem wird empfohlen innerhalb der MPD ein \elem{SegmentTemplate} zu verwenden. Ansonsten muss vor jedem Segment-Request auch die MPD upgedated werden. Außerdem wird die Verwendung von Indexsegmenten ausgeschlossen. Alle Mediensegmente müssen also selbstinitialisierend sein.
+	\item \textbf{MPEG-2 TS main (\attr{urn:mpeg:dash:profile:mp2t-main:2011})}: Verwendete Elemente der MPD und Segmentformate werden, mit Ausnahme der Verwendung von MPEG-2 TS statt IBMFF, nur sehr gering eingeschränkt. \elem{Representation}s die ein \elem{SegmentTimeline}-Element beinhalten werden ignoriert. Die Verwendung von Indexsegmenten wird stark empfohlen.
+	\item \textbf{MPEG-2 TS simple (\attr{urn:mpeg:dash:profile:mp2t-simple:2011})}: Ziel dieses Profils ist es, die Implementierung des Wechsels zu einer anderen \elem{Representation} zu vereinfachen. Das wird erreicht indem die Segmentstruktur stärker eingeschränkt wird. Software nach ISO/IEC 13818-1 (Generic coding of moving pictures and associated audio) sollte in der Lage sein den Stream durch Konkatenation aller Segmente verschiedener \elem{Representation}s im selben \elem{AdaptionSet} wiederzugeben. PSI (Program specific metadata), welche mitunter PMT und PAT enthält, muss dafür in allen \elem{Representation}s identisch sein. Die Verwendung von Indexsegmenten und \elem{SegmentTemplate} werden zudem stark empfohlen.
+\end{itemize}
+ 
+Für Broadcast-TV existiert zudem ein eigenes, auf IBMFF basierendes Profil. Ebenfalls existieren zum \textit{Live}- und \textit{On-Demand}-Profil \textit{extended} Versionen die unterstützte Features weniger stark einschränken. Diese können bei Bedarf im Standard nachgelesen werden.
 
 \subsection{Algorithmen zur Bitratenadapierung}
 
