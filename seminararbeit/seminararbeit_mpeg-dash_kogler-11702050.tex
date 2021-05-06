@@ -410,7 +410,64 @@ Beide \elem{AdaptionSet}s verwenden für die Auflösung der URL zu den jeweilige
 
 \subsection{Segmentformate}
 \label{segment_formats}
-Clause 6
+In der MPD angeführte URLs referenzieren auf die eigentlichen Nutzdaten im Stream: sogenannte \textit{Segmente}. Diese Segmente können wiederum auf einer Reihe an weiteren Containerformaten aufbauen. Die im Standard dediziert behandelten Formate sind das \textbf{ISO Base Media File format} (kurz IBMFF) nach ISO/IEC 14496-12 und \textbf{MPEG-2 Transport Streams} (kurz MPEG-2 TS).
+
+IBMFF wurde als MPEG-4 Part 12 veröffentlicht und definiert Vorgaben eines generellen Dateiformats für zeitbasierte Multimediadaten. Der Standard definiert keine Spezifika für die Übertragung über das Netwerk, geht aber grundsätzlich von einem sicheren (im Sinne von \textit{nicht fehlerbehafteten}) Übertragungsmedium aus. Konkrete Containerformate wie MP4 und 3GP verwenden IBMFF als Basis. IBMFF-basierte Segmente werden in verschiedene \textit{Boxes} unterteilt. Eine Box ist mindestens 8 Byte groß, wobei die ersten 4 Byte die Größe und die darauffolgenden 4 Bytes den Typ der Box angeben. Deshalb sind die Identifikatoren der verschiedenen Boxtypen immer vier Buchstaben lang.
+
+MPEG-2 TS hingegen wurde für die Übertragung von Medienströmen über unsichere Medien (zB Broadcasts über Satellit) entworfen. Aufgrund der unsicheren Natur des Übertragungsmediums wird verstärkt Fokus auf Fehlerkorrektur und Synchronisation gelegt. MPEG-2 TS finden vorallem im Digitalfernsehen Anwendung und wird mitunter bei DVB und IPTV verwendet. MPEG-2 TS basierende Segmente verarbeiten \textit{Packets}, welche wiederum in \textit{Header} und \textit{Payload} unterteilt werden.
+
+DASH unterscheidet zwischen vier verschiedenen Segmenttypen die je nach zugrundeliegendem Containerformat unterschiedlich strukturiert sind.
+
+\subsubsection{Initialization Segments}
+Das Initialisierungssegment beinhält keine kodierten Mediendaten sondern nur Metadaten die Aussagen über die Nutzdaten des zu verarbeitenden Medienstroms treffen. Mit diesen Metadaten sollte die verarbeitende Software in der Lage sein alle Folgesegmente richtig zu dekodieren.
+
+IBMFF sieht eine Aufteilung des Initialisierungssegments in zwei Boxes vor. Eine \textit{File-Type}-Box (\attr{ftyp}) welche den Dateityp angibt und eine \textit{Movie}-Box (\attr{moov}) die Information über Anzeigecharakteristiken des Videos beinhält.
+
+Initialisierungssegmente für MPEG-2 TS beinhalten Informationen die sich über den gesamten Strom hinweg nicht ändern. Dazu gehört ein jedem Fall ein \attr{PAT}-Abschnitt (\textbf{P}rogram \textbf{A}ssociation \textbf{T}able) welches Programmnummern für alle im Stream enthaltenen Programme beinhält. Häufig wird auch ein \attr{PMT} (\textbf{P}rogram \textbf{M}ap \textbf{T}able) inkludiert, welcher weitere Informationen zu den Programmen enthält. Es können auch noch weitere Abschnitte enthalten sein, solange sich die beinhalteten Daten über den gesamten Transportstrom hinweg nicht ändern.
+Init-Segmente für MPEG-2 TS müssen nicht vollständig sein. D.h. es reicht wenn die Konkatenation aller Pakete des Stroms alle Metadaten beinhält die für das Abspielen nötig sind.
+
+\begin{center}
+	\begin{figure}[h]
+		\centering
+		\includegraphics{images/isobmff_init-seg.png}
+		\includegraphics{images/mpeg2ts_init-seg.png}
+		\caption{Initialisierungssegmente für IBMFF und MPEG-2 TS im Vergleich}
+	\end{figure}
+\end{center}
+
+Initialisierungssegmente sind optional. Wird kein Initialisierungssegment an den Player übermittelt müssen die Mediensegmente \textit{selbstinitialisierend} sein.
+
+\subsubsection{Media Segments}
+Mediensegmente beinhalten die eigentlichen Mediendaten welche in den Initialisierungsdaten beschrieben sind und wiedergegeben werden können.
+
+Im Fall von IBMFF wird zwischen vier Typen von Mediensegmenten unterschieden:
+
+\begin{itemize}
+	\item \textbf{Delivery Unit Media Segment} bilden die Grundlage für alle weiteren Segmenttypen. Jedes Segment besitzt eines oder mehrere \textit{Movie Fragments} die wiederum aus einer \attr{moof}- und einer \attr{mdat}-Box bestehen. Ersteres beinhält Metadaten über das Fragment, zweiteres beinhält die eigentlichen, kodierten Mediendaten. Movie Fragments müssen \textit{self-contained} sein. Das bedeutet dass keine Referenzen auf Daten außerhalb des eigenen Segments verwendet werden dürfen. Erkennbar sind Delivery Unit Media Segments an der \textit{Segment Type}-Box \attr{stype}, welche den Wert \attr{dums} aufweist.
+	\item \textbf{Simple format type} 
+	\item \textbf{Indexed Media Segment}:
+	\item \textbf{Random Access Media Segment}:
+\end{itemize}
+
+MPEG-2 TS unterscheidet grundsätzlich nur zwischen zwei Typen von Mediensegmenten:
+\begin{itemize}
+	\item \textbf{Basic Media Segment}: ... . \textit{Basic Media Segments} können außerdem selbstinitialiserend sein und/oder Information zur Verschlüsselung von Folgepaketen beinhalten.
+	\item \textbf{Bitstream Switching Segment}:
+\end{itemize}
+
+Mediendaten können nicht abgespielt werden solange das Initialisierungssegment nicht heruntergeladen und verarbeitet wurde was die Vorlaufzeit für den Beginn des Playbacks negativ beeinträchtigt. Aus diesem Grund wurden selbstinitialisierende Mediensegmente eingeführt, die an ihrem \attr{ftyp} 'dsms' erkennbar sind. Die Abkürzung steht für \textit{DASH Self-Initializing Media Segment}.
+
+\subsubsection{Index Segments}
+Indexsegmente enthalten Indexinformation über die Mediensegmente des Streams. Diese wird verwendet um 
+
+\subsubsection{Bitstream Switching Segments}
+\textit{Bitstream-Switching}-Segmente enthalten Daten die benötigt werden wenn auf eine andere \elem{Representation} gewechselt wird.
+
+\subsubsection{Segment Indexes}
+Jedes Mediensegment kann außerdem einen Segment-Index besitzen. IBMFF realisiert dies mithilfe einer dediziert \attr{sidx}-Box. MPEG-2 TS nutzt den \attr{PID}-Wert (\textbf{P}rogram \textbf{ID}) für den Segment Index.
+
+TODO: Wie kann auf diesen in der MPD referenziert werden ?
+
 
 \subsection{Profile}
 \label{profiles}
