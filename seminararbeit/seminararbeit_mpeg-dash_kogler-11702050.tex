@@ -184,9 +184,6 @@ Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserv
 \end{center}
 
 
-\subsection{HTTP (grundsätzlich, warum für Streaming geeignet?)}
-DASH schreibt die Nutzung von HTTP/1.1 oder 1.0 im Streamingprozess vor. Das ist vorallem auf eine Auswahl an Features zurückzuführen, die in früheren HTTP-Versionen nicht vorhanden ist. Erkläre basic GET-Requests, welche Features mit HTTP 1.0 nicht genutzt werden usw.
-
 \subsection{Media Presentation Description (MPD)}
 Bevor der Streamingprozess beginnt muss die MPD zwischen Client und Server ausgetauscht werden. Der Austauschprozess wird dabei nicht vom Standard vorgegeben sondern ist von der Implementierung des jeweiligen Anbieters abhängig.
 
@@ -489,15 +486,45 @@ Profile können wieder je nach verwendetem Segmentformat in zwei Kategorien eing
  
 Für Broadcast-TV existiert zudem ein eigenes, auf IBMFF basierendes Profil. Ebenfalls existieren zum \textit{Live}- und \textit{On-Demand}-Profil \textit{extended} Versionen die unterstützte Features weniger stark einschränken. Diese können bei Bedarf im Standard nachgelesen werden.
 
+\subsection{HTTP für Videostreaming}
+Bisweilen wurde stark darauf eingegangen welchen Standards Clients und Server im Streamingprozess zu folgen haben. Zur Kommunikation zwischen den beiden Instanzen sind jedoch Netzwerkprotokolle zuständig.
+
+Bevor adaptives Streaming und HTTP für Videostreaming über das Internet benutzt wurden, war das Real-Time Streaming Protocol (RTSP) vorherrschend im Videostreaming-Sektor. RTSP speichert und verwaltet den Status jedes verbundenen Clients auf der Serverseite und zählt deshalb zur Gattung der zustandsorientierten Protokolle. Das reduziert zwar clientseitigen Aufwand, bringt aber eine Reihe von Problemen mit sich. Mit steigendem Videotraffic werden immer leistungsstärkere Server benötigt um alle Clients zeitgerecht bedienen zu können. Zudem sind Skalierbarkeit weder im Sinne von High-Performance, noch beim Failover trivial da der Zustand des Clients \textit{übertragen} werden muss.
+
+TODO: Tina Paper als Quelle einfügen
+
+HTTP hingegen ist ein zustandsloses Protokoll. Das bedeutet dass jede Anfrage eines Clients komplett unabhängig von etwaigen vorhergehenden Anfragen behandelt wird. Durch diese Eigenschaft ist HTTP von Natur aus gut skalierbar. Zusätzlich unterstützt wird die Skalierbarkeit durch den Einsatz von Content Distribution Networks (CDNs), die als Proxys den ursprünglichen HTTP-Server entlasten und zusätzlich bessere Latenz durch Ausnutzung geographischer Faktoren versprechen.
+
+Skalierbarkeit ist allerdings nicht der einzige Grund für den Einsatz von HTTP im Streamingbereich wie Thomas Stockhammer in seinem Paper \glqq Dynamic Adaptive Streaming over HTTP - Standards and Design Principles \grqq aufzeigt. Einige davon wären: 
+
+\begin{itemize}
+	\item Streaming über HTTP vermeidet weitgehend Probleme mit NAT und Firewalls.
+	\item Standard HTTP-Server (und Caches) sind weit verbreitet und deshalb günstig.
+	\item Durch die Zustandslosigkeit von HTTP kann die Kontrolle über den Streamingprozess komplett an den Client übergeben werden. Bei Änderungen der Bandbreite und Wechsel auf eine höhere/niedrigere Bitrate ist keine Verhandlung (eng. \textit{negotiation}) mit dem Server nötig.
+\end{itemize}
+
+Der Download von Segmenten über den Client erfolgt über HTTP GET-Requests. Um auch \textit{partial GET-Requests} für Byte-Ranges benutzen zu können schreibt DASH die Verwendung von HTTP/1.1 vor. 
+
 \subsection{Algorithmen zur Bitratenadapierung}
+Eine weitere Zuständigkeit des Clients ist die Steuerung der Bitratenadaption. Der implementierte Algorithmus ist dafür zuständig wann auf eine andere \elem{Representation} mit niedrigerer Bitrate (schlechtere Qualität) oder höhrerer Bitrate (bessere Qualität) gewechselt wird.
 
-Nicht im DASH-Standard enthalten.
+Dieser Teil des Clients ist im Gegensatz zur MPD-Struktur und den Segmentformaten nicht im Standard enthalten und deshalb implementierungsspezifisch im Bezug auf den verwendeten Client. 
 
-\subsection{Encoding?}
+Diese Algorithmen können in vier Kategorien eingeteilt werden:
+TODO: Fabse Paper zitieren
 
-\subsection{Transportprotokolle}
+\begin{enumerate}
+	\item \textbf{Client-based adaption}: Der Großteil aller Bitratenadapierungsschemen findet auf der Clientseite statt. Ein Teil der Clientsoftware misst ständig Metriken wie die verfügbare Bandbreite, Pufferlevel oder CPU-Auslastung und entscheidet basierend darauf welches Segment als nächstes heruntergeladen wird. 
+	\item \textbf{Server-based adaption}: Server-basierte Ansätze zur Bitratenadaptierung beziehen den Client nicht mit ein, sondern entscheiden via \textit{traffic-shaping} welcher Client wie viel Bandbreite erhält. Damit möchte man einer unfairen Verteilung der Netzwerkressourcen zwischen Clients und Bitraten-Instabilität vermeiden. Letzteres tritt auf wenn der Client die Bitrate oft ändert und es dadurch zu Oszillation kommt. Da dafür aber Zusatzsoftware am Server benötigt wird, stehen serverseitige Ansätze im Konflikt mit dem DASH-Standard. Diese besagt dass die Auslieferung der Segmente über einen Standard-HTTP-Server erfolgt.
+	\item \textbf{Network-assisted adaption}: Dieser Ansatz ermöglicht es den Clients Netzwerkinformationen bei der Auswahl der Bitrate miteinzubeziehen. Um an diese Netzwerkdaten zu kommen muss ein \textit{Agent} im Netzwerk platziert werden der Clients über die effizienteste Nutzung der vorhandenen Netzwerkressourcen informiert.
+	\item \textbf{Hybrid adaption}: Bei hybriden Verfahren werden mehrere Komponenten in Verbindung miteinander eingesetzt um \textit{Quality of Experience} (QoE) für den Benutzer zu erhöhen. Rein clientbasierte Ansätze stoßen an ihre Grenzen wenn mehrere DASH-Clients über ein gemeinsames Netzwerk streamen, da ein Client für sich keine Überblick über die Gesamtsituation im Netzwerk hat. \textit{Software Defined Networks} (SDNs) verwenden ohnehin einen Controller für die Verwaltung der Netzwerkgeräte und Ressourcen. Dieser kann über ein QoE-Fairness-Framework (QFF) sicherstellen dass die verfügbaren Ressourcen gleichmäßig zwischen den Clients aufgeteilt werden. Ein weiterer Hybridansatz ist \textit{Server and Network-assisted DASH (SAND)}. SAND bezieht Server und Netzwerkmetriken mit ein die einerseits an die Clients verteilt und ebenso an \textit{DASH aware network elements (DANE)} gesendet werden. Die gesammelten Metriken fließen in die Entscheidung des Clients ein während DANEs die Bereitstellung dynamisch optimieren.
+\end{enumerate}
 
-\subsection{exotische Technologien (VR / AR, 360 Grad, Multiview)}
+\subsection{Quality of Experience (QoE)}
+
+
+\subsection{Tools \& Referenzsoftware}
+CAdVise; Reference-Player (dash.js), libdash usw.
 
 
 % % % % % % % % % % % % % % % % % % % % % %
