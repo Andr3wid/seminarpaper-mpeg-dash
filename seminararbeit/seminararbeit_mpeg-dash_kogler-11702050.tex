@@ -30,12 +30,22 @@
 \setkomafont{captionlabel}{\small\sffamily\bfseries}
 \addtokomafont{caption}{\small}
 
-% custom commands
+% custom commands to uniformly style XML ELEMents and ATTRibutes
+% also inclusion of style to brush up XML listings with syntax highlighting and line-numbers
 \input{xmlstyle.tex}
 \def\attr#1{\texttt{#1}}
 \def\elem#1{\texttt{\textbf{#1}}}
 \lstnewenvironment{lstcode}
                     {\lstset{frame=shadowbox, linewidth=10cm}}{}
+
+% custon command to display sources below captions on figures
+\newcommand*{\captionsource}[2]{%
+  \caption[{#1}]{%
+    #1%
+    \\\hspace{\linewidth}%
+    \textbf{Source:} #2%
+  }%
+}
 
 %% set heading and footer
 %% scrheadings default: 
@@ -192,7 +202,7 @@ Eine MPD-Datei dient als \textit{Inhaltsverzeichnis} für den Client, bietet ein
 
 Die Dateistruktur wird strikt durch den Standard vorgegeben. MPD-Dateien folgen einem durch den Standard vorgegebenen XML-Schema. Folgende Grafik veranschaulicht die wichtigsten Komponenten einer MPD auf die in den kommenden Abschnitten näher eingegangen wird:
 
-	\begin{figure}[h!]
+	\begin{figure}[ht]
 		\centering
 		\includegraphics[width=12cm]{images/mpd-structure.png}
 		\caption{Quelle: Sodagar Paper}
@@ -412,7 +422,7 @@ In der MPD angeführte URLs referenzieren auf die eigentlichen Nutzdaten im Stre
 
 IBMFF wurde als MPEG-4 Part 12 veröffentlicht und definiert Vorgaben eines generellen Dateiformats für zeitbasierte Multimediadaten. Der Standard definiert keine Spezifika für die Übertragung über das Netwerk, geht aber grundsätzlich von einem sicheren (im Sinne von \textit{nicht fehlerbehafteten}) Übertragungsmedium aus. Konkrete Containerformate wie MP4 und 3GP verwenden IBMFF als Basis. IBMFF-basierte Segmente werden in verschiedene \textit{Boxes} unterteilt. Eine Box ist mindestens 8 Byte groß, wobei die ersten 4 Byte die Größe und die darauffolgenden 4 Bytes den Typ der Box angeben. Deshalb sind die Identifikatoren der verschiedenen Boxtypen immer vier Buchstaben lang. Boxes können wie in Abbildung \ref{ibmff_boxes} gezeigt wieder weitere Boxes beinhalten und so eine hierarchische Struktur abbilden.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=12cm]{images/isobmff_boxes.png}
 	\caption{Quelle: Figure 26 in Compliance Procedures for Dynamic Adaptive Streaming over HTTP (DASH)}
@@ -538,7 +548,7 @@ Um Performancemessungen in eigenen DASH-Streams durchführen zu können und dies
 Grundlage für die Realisierung eines DASH-Clients bietet die offizielle Referenzbibliothek \textit{libdash}. Wie in Grafik \ref{libdash_embedded} dargestellt stellt libdash durch seinen MPD-Parser eine objektorientierte Schnittstelle zur MPD bereit. Auch der Download von Segmenten erfolgt über den bibliotheksinternen HTTP Manager.
 
 \begin{center}
-	\begin{figure}[h]
+	\begin{figure}[ht]
 		\centering
 		\includegraphics[width=12cm]{images/libdash_embedded.png}
 		\caption{https://doi.org/10.1109/CAIS.2019.8769444; Die Aufgaben von libdash im DASH-Client}
