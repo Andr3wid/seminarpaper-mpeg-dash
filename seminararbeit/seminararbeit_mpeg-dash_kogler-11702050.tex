@@ -149,7 +149,7 @@ Nicht-standardisierte Teile werden konzeptuell eingeführt und anhand aktueller 
 \section{Warum Adaptives Streaming?}
 Die Anzahl potentieller Endgeräte mit denen Menschen Videostreams konsumieren erfreut sich großer Diversität. Neben klassischen Medien wie PC und TV-Receiver haben sich vorallem Smartphones, Tablets und Spielkonsolen in verschiedensten Konfigurationen im täglichen Gebrauch der NutzerInnen etabliert.
 
-Diese Endgeräte weisen unterschiedliche Charakteristiken auf, welche die Anforderungen an das Videoformat und dessen Übertragung stark beeinflussen. Vorrangig betrachten wir im Kontext von Videostreaming die Bildschirmgröße und Auflösung sowie die Verfügbare Bandbreite des Endgeräts und des Netzwerks.
+Diese Endgeräte weisen unterschiedliche Charakteristiken auf, welche die Anforderungen an das Videoformat und dessen Übertragung stark beeinflussen. Vorrangig betrachten wir im Kontext von Videostreaming die Bildschirmgröße und Auflösung sowie die verfügbare Bandbreite des Endgeräts und des Netzwerks.
 Es reicht also nicht, ein Video in einer einzigen Version serverseitig zu speichern. Während die Qualität für einen Full-HD Computerbildschirm völlig ausreichend sein könnte, würde sie auf einem 4k-TV aufgrund zu geringer Auflösung verschwommen angezeigt werden und wäre für einen Smartphone-Bildschirm unnötig groß. Letzteres lässt bereits anmuten dass auch die effiziente Nutzung von Netzwerkressourcen eine zentrale Rolle im Videostreaming spielt.
 
 Smartphones, die mit steigender Tendenz einen Großteil des globalen Internettraffics ausmachen, sind zu einem Großteil über das Mobilfunknetz an das Internet angebunden \cite{cisco_syst_inc_cisco_2017}. Hier kann es insbesondere zu Schwankungen in der verfügbaren Bandbreite am Endgerät und im Netzwerk kommen. Ein Einbruch der verfügbaren Bandbreite führt zu Pufferwartezeiten bei der Wiedergabe, was die QoE (Quality of Experience) wiederum stark negativ beeinflusst \cite{seufert_survey_2015}.
@@ -248,14 +248,14 @@ Bei inhomogenen \elem{AdaptionSets} müssen Inhalte durch \elem{ContentComponent
 \subsubsection{<Representation>}
 Ein \elem{Representation}-Element beinhält eine Menge an Medieninhalten welche die Dauer des übergeordneten \elem{Period}-Elements ab dem errechneten oder angegebenen Start des \elem{Period}-Elements umfasst \cite{international_organization_for_standardization_isoiec_nodate}.
 
-Jedes \elem{Representation}-Element beinhält einen oder mehrere segmentierte Media-streams, wobei jeder stream eine kodierte Komponente (e.g. Audio, Video, Untertitel) repräsentiert. Folgende Attribute müssen für ein valides \elem{Representation}-Element vorhanden sein:
+Jedes \elem{Representation}-Element beinhält einen oder mehrere segmentierte Medienströme, wobei jeder Stream eine kodierte Komponente (e.g. Audio, Video, Untertitel) repräsentiert. Folgende Attribute müssen für ein valides \elem{Representation}-Element vorhanden sein:
 
 \begin{itemize}
 	\item \attr{id:} Das \attr{id}-Attribut muss innerhalb eines Period-Elements einzigartig sein, es sei denn ein funktional äquivalentes \elem{Representation}-Element existiert innerhalb der Period.
 	\item \attr{bandwidth:} Gibt die Bandbreite in Bits pro Sekunde (bps) an die für diese Qualitätsstufe empfohlen wird.
 \end{itemize}
 
-\elem{Represenation}-Elemente können auch zusammengesetzte Media-streams beinhalten (zB Audio und Video in einem Strom). In diesem Fall werden \textbf{Sub-Representation}-Elemente eingeführt die Informationen über die enthaltenen Media-streams preisgeben.
+\elem{Represenation}-Elemente können auch zusammengesetzte Medienströme beinhalten (zB Audio und Video in einem Strom). In diesem Fall werden \textbf{Sub-Representation}-Elemente eingeführt die Informationen über die enthaltenen Komponenten preisgeben.
 
 \subsubsection{Gemeinsame Attribute und Elemente}
 Eine Reihe von Attributen und Elementen kann sowohl auf der Ebene des \elem{AdaptionSets} als auch in \elem{(Sub-)Representation}-Elementen angegeben werden. Diese zusätzlichen Daten geben viel über die Natur der enthaltenen Segmente preis und sind großteils vom enthaltenen Medientyp abhängig.
@@ -405,7 +405,7 @@ Anhand des \attr{mimeType}s lässt sich erkennen dass es sich bei ersterem \elem
 
 Das zweite \elem{AdaptionSet} beinhält die zugehörigen Audiodaten, welche mithilfe von MP4-Audio (\textbf{A}dvanced \textbf{A}udio \textbf{C}oding) kodiert wurden.
 
-Beide \elem{AdaptionSet}s verwenden für die Auflösung der URL zu den jeweiligen Segmentdaten \elem{SegmentTemplate}s mit den besprochenen Ersetzungsidentifikatoren. Wie in \ref{segment_formats} erwähnt wird, wird zu Beginn des Streams ein Initialisierungssegment gesendet welches von der Engine die die Mediendaten verarbeiten / abspielen soll verarbeitet wird. Dieses Segment wird praktisch gerne von den restlichen Mediensegmenten separat behandelt. Aus diesem Grund kann mit \attr{initialization} ein dediziertes URL-Template für das Initialisierungssegment angelegt werden.
+Beide \elem{AdaptionSet}s verwenden für die Auflösung der URL zu den jeweiligen Segmentdaten \elem{SegmentTemplate}s mit den besprochenen Ersetzungsidentifikatoren. Wie in \ref{segment_formats} erwähnt wird, wird zu Beginn des Streams ein Initialisierungssegment gesendet welches von der Engine die die Mediendaten abspielen soll verarbeitet wird. Dieses Segment wird in der Praxis gerne von den restlichen Mediensegmenten separat behandelt. Aus diesem Grund kann mit \attr{initialization} ein dediziertes URL-Template für das Initialisierungssegment angelegt werden.
 
 
 \subsection{Segmentformate}
@@ -508,13 +508,13 @@ Eine weitere Zuständigkeit des Clients ist die Steuerung der Bitratenadaption. 
 
 Dieser Mechanismus ist im Gegensatz zur MPD-Struktur und den Segmentformaten nicht im Standard enthalten und deshalb implementierungsspezifisch im Bezug auf den verwendeten Client.
 
-Diese Algorithmen wurden von \cite{bentaleb_survey_2019} in vier Kategorien unterteilt:
+Diese Algorithmen wurden von Bentaleb et al. \cite{bentaleb_survey_2019} in vier Kategorien unterteilt:
 
 \begin{enumerate}
 	\item \textbf{Client-based adaption}: Der Großteil aller Bitratenadapierungsschemen findet auf der Clientseite statt. Ein Teil der Clientsoftware misst ständig Metriken wie die verfügbare Bandbreite, Pufferlevel oder CPU-Auslastung und entscheidet basierend darauf welches Segment als nächstes heruntergeladen wird. 
 	\item \textbf{Server-based adaption}: Server-basierte Ansätze zur Bitratenadaptierung beziehen den Client nicht mit ein, sondern entscheiden via \textit{traffic-shaping} welcher Client wie viel Bandbreite erhält. Damit möchte man einer unfairen Verteilung der Netzwerkressourcen zwischen Clients und Bitraten-Instabilität vermeiden. Letzteres tritt auf wenn der Client die Bitrate oft ändert und es dadurch zu Oszillation kommt. Da dafür aber Zusatzsoftware am Server benötigt wird, stehen serverseitige Ansätze im Konflikt mit dem DASH-Standard. Dieser besagt dass die Auslieferung der Segmente über einen Standard-HTTP-Server erfolgt.
 	\item \textbf{Network-assisted adaption}: Dieser Ansatz ermöglicht es den Clients Netzwerkinformationen bei der Auswahl der Bitrate miteinzubeziehen. Um an diese Netzwerkdaten zu kommen muss ein \textit{Agent} im Netzwerk platziert werden der Clients über die effizienteste Nutzung der vorhandenen Netzwerkressourcen informiert.
-	\item \textbf{Hybrid adaption}: Bei hybriden Verfahren werden mehrere Komponenten in Verbindung miteinander eingesetzt um \textit{Quality of Experience} (QoE) für den Benutzer zu erhöhen. Rein clientbasierte Ansätze stoßen an ihre Grenzen wenn mehrere DASH-Clients über ein gemeinsames Netzwerk streamen, da ein Client für sich keine Überblick über die Gesamtsituation im Netzwerk hat. \textit{Software Defined Networks} (SDNs) verwenden ohnehin einen Controller für die Verwaltung der Netzwerkgeräte und Ressourcen. Dieser kann über ein QoE-Fairness-Framework (QFF) sicherstellen dass die verfügbaren Ressourcen gleichmäßig zwischen den Clients aufgeteilt werden. Ein weiterer Hybridansatz ist \textit{Server and Network-assisted DASH (SAND)}. SAND bezieht Server und Netzwerkmetriken mit ein die einerseits an die Clients verteilt und ebenso an \textit{DASH aware network elements (DANE)} gesendet werden. Die gesammelten Metriken fließen in die Entscheidung des Clients ein während DANEs die Bereitstellung dynamisch optimieren.
+	\item \textbf{Hybrid adaption}: Bei hybriden Verfahren werden mehrere Komponenten in Verbindung miteinander eingesetzt um \textit{Quality of Experience} (QoE) für den Benutzer zu erhöhen. Rein clientbasierte Ansätze stoßen an ihre Grenzen wenn mehrere DASH-Clients über ein gemeinsames Netzwerk streamen, da ein Client für sich keinen Überblick über die Gesamtsituation im Netzwerk hat. \textit{Software Defined Networks} (SDNs) verwenden ohnehin einen Controller für die Verwaltung der Netzwerkgeräte und Ressourcen. Dieser kann über ein QoE-Fairness-Framework (QFF) sicherstellen dass die verfügbaren Ressourcen gleichmäßig zwischen den Clients aufgeteilt werden. Ein weiterer Hybridansatz ist \textit{Server and Network-assisted DASH (SAND)}. SAND bezieht Server und Netzwerkmetriken mit ein die einerseits an die Clients verteilt und ebenso an \textit{DASH aware network elements (DANE)} gesendet werden. Die gesammelten Metriken fließen in die Entscheidung des Clients ein während DANEs die Bereitstellung dynamisch optimieren.
 \end{enumerate}
 
 \subsection{Quality of Experience (QoE)}
@@ -526,7 +526,7 @@ Durch den Einbezug der Persönlichkeit und Befindlichkeit eines Benutzers / eine
 
 Seufert et al. \cite{seufert_survey_2015} unterteilt QoE-Einflussfaktoren in DASH-Streams in drei Kategorien:
 \begin{itemize}
-	\item \textbf{Initial Delay} nennt man die Zeit die verstreicht bis ein Multimedia-Client mit dem Playback beginnen kann. Diese Verzögerung zu Beginn des Streamingprozesses entsteht da initial der Puffer des Clients gefüllt werden muss. Diese Wartezeit beeinflusst die QoE nur in geringem Ausmaß. 90\% der NutzerInnen geben an dass sie Wartezeiten zu Beginn des Videos einer Unterbrechung des laufenden Playbacks (\textit{Stalling}) bevorzugen. Anders verhält sich dieser Parameter wenn viele, kurze Videos nur zu Teilen konsumiert werden (\textit{Video Browsing}).
+	\item \textbf{Initial Delay} nennt man die Zeit die verstreicht bis ein Multimedia-Client mit dem Playback beginnen kann. Diese Verzögerung zu Beginn des Streamingprozesses entsteht da initial der Puffer des Clients gefüllt werden muss. Diese Wartezeit beeinflusst die QoE nur in geringem Ausmaß. 90\% der NutzerInnen geben an dass, sie Wartezeiten zu Beginn des Videos einer Unterbrechung des laufenden Playbacks (\textit{Stalling}) bevorzugen. Anders verhält sich dieser Parameter wenn viele, kurze Videos nur zu Teilen konsumiert werden (\textit{Video Browsing}).
 	\item Als \textbf{Stalling} bezeichnet man einen Stopp des Videoplaybacks aufgrund von Pufferunterläufen. Die Größe des Puffers spielt hierbei eine zentrale Rolle. Bei großen Puffern wird die Wahrscheinlichkeit von Stallings minimiert, während allerdings die Dauer eines Rebuffering-Events zunimmt. Testpersonen gaben Stalling als den Faktor an der das Streamingerlebnis am stärksten negativ beeinflusst. Weniger, längere Stallings werden häufigeren, kurzen Rebufferings bevorzugt.
 	\item Durch \textbf{Adaption} kann die Qualitätsstufe des konsumierten Mediums während der Wiedergabe gewechselt werden. Diese, im klassischen Videostreaming nicht vorhandene Dimension, wird von Testpersonen besonders bei häufigen Qualitätswechseln als störend empfunden. Adaption degradiert die QoE trotzdem weniger schwer als Stalling.
 \end{itemize}
@@ -554,7 +554,7 @@ Serverseitig kann Standard HTTP-Server-Software zur Auslieferung der Segmente wi
 Auf der Website des \textit{Dash Industry Forum}s können IBMFF-Segmente und MPD-Dateien mithilfe des \hyperref{https://conformance.dashif.org/}{}{}{Conformance-Tools} kostenlos validiert und getestet werden.
 
 \section{Konklusion}
-HTTP Adaptive Sstreaming (HAS) ist aus der modernen Medienlandschaft nicht mehr wegzudenken und hat mit MPEG-DASH einen offenen und gut unterstützten Standard erhalten. Im Verlauf dieser Seminararbeit haben wir uns mit den im Standard definierten Bausteinen von DASH, namentlich der Media Presentation Description und den Segmentformaten auseinandergesetzt und ein Grundverständnis für deren Zusammenspiel geschaffen.
+HTTP Adaptive Streaming (HAS) ist aus der modernen Medienlandschaft nicht mehr wegzudenken und hat mit MPEG-DASH einen offenen und gut unterstützten Standard erhalten. Im Verlauf dieser Seminararbeit haben wir uns mit den im Standard definierten Bausteinen von DASH, namentlich der Media Presentation Description und den Segmentformaten auseinandergesetzt um ein Grundverständnis für deren Zusammenspiel zu schaffen.
 
 Anschließend wurde ein Überblick über verschiedene Arten von Algorithmen zur Bitratenadaption sowie Quality of Experience geboten. Abschließend folgte eine Vorstellung von verschiedenen Werkzeugen die den Leser dazu befähigen sollen selbst DASH-Streams zu erzeugen, zu verifizieren und deren Performance zu messen.
 
