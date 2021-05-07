@@ -31,6 +31,7 @@
 \addtokomafont{caption}{\small}
 
 % custom commands
+\input{xmlstyle.tex}
 \def\attr#1{\texttt{#1}}
 \def\elem#1{\texttt{\textbf{#1}}}
 \lstnewenvironment{lstcode}
@@ -356,7 +357,7 @@ Beispiele:
  
  Diese wird hier verwendet um die besprochenen Elemente in einen praktischen Kontext zu setzen.
 
-\begin{lstlisting}[language=XML,basicstyle=\tiny]
+\begin{lstlisting}[language=XML,basicstyle=\small]
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 <MPD id="f08e80da-bf1d-4e3d-8899-f0f6155f6efa" profiles="urn:mpeg:dash:profile:isoff-main:2011"
