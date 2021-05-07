@@ -38,15 +38,6 @@
 \lstnewenvironment{lstcode}
                     {\lstset{frame=shadowbox, linewidth=10cm}}{}
 
-% custon command to display sources below captions on figures
-\newcommand*{\captionsource}[2]{%
-  \caption[{#1}]{%
-    #1%
-    \\\hspace{\linewidth}%
-    \textbf{Source:} #2%
-  }%
-}
-
 %% set heading and footer
 %% scrheadings default: 
 %% footer - middle: page number
@@ -191,7 +182,7 @@ Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserv
 	\begin{figure}
 		\centering
 		\includegraphics[width=14cm]{images/adaptive-streaming-basic.png}
-		\caption{https://bitmovin.com/dynamic-adaptive-streaming-http-mpeg-dash/}
+		\caption{Quelle: https://bitmovin.com/dynamic-adaptive-streaming-http-mpeg-dash/}
 	\end{figure}
 
 
@@ -205,7 +196,7 @@ Die Dateistruktur wird strikt durch den Standard vorgegeben. MPD-Dateien folgen 
 	\begin{figure}[ht]
 		\centering
 		\includegraphics[width=12cm]{images/mpd-structure.png}
-		\caption{Quelle: Sodagar Paper}
+		\caption{Quelle: \cite{sodagar_mpeg-dash_2011}, Figure 3, S. 65}
 	\end{figure}
 
 \textbf{Notiz:} Es werden pro Abschnitt nur Attribute und Sub-Elemente besprochen die laut ISO/IEC 23009-1 als \textit{Mandatory}, also unbedingt notwendig, gekennzeichnet sind oder dem Zweck eines anschaulichen Beispiels dienen. Für eine vollständige Übersicht wird auf den offiziellen Standard ISO/IEC 23009 Part 1 (Media Presentation Description and Segment formats) verwiesen.
@@ -425,7 +416,7 @@ IBMFF wurde als MPEG-4 Part 12 veröffentlicht und definiert Vorgaben eines gene
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=12cm]{images/isobmff_boxes.png}
-	\caption{Quelle: Figure 26 in Compliance Procedures for Dynamic Adaptive Streaming over HTTP (DASH)}
+	\caption{Quelle: \cite{mazhar_compliance_2011}, Figure 26, S. 50}
 	\label{ibmff_boxes}
 \end{figure}
 
@@ -551,7 +542,7 @@ Grundlage für die Realisierung eines DASH-Clients bietet die offizielle Referen
 	\begin{figure}[ht]
 		\centering
 		\includegraphics[width=12cm]{images/libdash_embedded.png}
-		\caption{https://doi.org/10.1109/CAIS.2019.8769444; Die Aufgaben von libdash im DASH-Client}
+		\caption{Quelle: \url{https://doi.org/10.1109/CAIS.2019.8769444}}
 		\label{libdash_embedded}
 	\end{figure}
 \end{center}
