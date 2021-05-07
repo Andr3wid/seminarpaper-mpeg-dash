@@ -115,9 +115,10 @@
 % % % % % % % % % % % % % % % % % % % % % %
 
 % \thispagestyle{empty}
-% \tableofcontents
+\tableofcontents
 % \listoffigures
 % \listoftables
+\pagebreak
 
 % % % % % % % % % % % % % % % % % % % % % %
 
@@ -521,18 +522,52 @@ TODO: Fabse Paper zitieren
 \end{enumerate}
 
 \subsection{Quality of Experience (QoE)}
+Oberstes Ziel von adaptiven Streamingtechnologien ist erhöhte Benutzerzufriedenheit. Um Benutzerzufriedenheit mit einem System (nicht nur DASH) konzeptuell darstellen zu können wurde der Begriff \textit{Quality of Experience (QoE)} wie folgt definiert:
 
+\glqq \textit{Quality of Experience (QoE) is the degree of delight or annoyance of the user of an application or service. It results from the fulfillment of his or her expectations with respect to the utility and / or enjoyment of the application or service in the light of the user’s personality and current state.}\grqq \cite{brunnstrom_qualinet_2013}
+
+Durch den Einbezug der Persönlichkeit und Befindlichkeit eines Benutzers / einer Benutzerin während der Nutzung des Systems grenzt sich QoE vom verbreiteten Konzept der \textit{Quality of Service (QoS)} ab. QoS wird weitgehend für die Charakterisierung von Telekommunikationssystemen und deren Fähigkeit den Anforderungen von BenutzerInnen und Diensten gerecht zu werden verwendet. Schlechte QoS impliziert schlechte QoE. Gute QoS allerdings reicht nicht aus um auch gute QoE zu garantieren.
+
+Seufert et al. \cite{seufert_survey_2015} unterteilt QoE-Einflussfaktoren in DASH-Streams in drei Kategorien:
+\begin{itemize}
+	\item \textbf{Initial Delay} nennt man die Zeit die verstreicht bis ein Multimedia-Client mit dem Playback beginnen kann. Diese Verzögerung zu Beginn des Streamingprozesses entsteht da initial der Puffer des Clients gefüllt werden muss. Diese Wartezeit beeinflusst die QoE nur in geringem Ausmaß. 90\% der NutzerInnen geben an dass sie Wartezeiten zu Beginn des Videos einer Unterbrechung des laufenden Playbacks (\textit{Stalling}) bevorzugen. Anders verhält sich dieser Parameter wenn viele, kurze Videos nur zu Teilen konsumiert werden (\textit{Video Browsing}).
+	\item Als \textbf{Stalling} bezeichnet man einen Stopp des Videoplaybacks aufgrund von Pufferunterläufen. Die Größe des Puffers spielt hierbei eine zentrale Rolle. Bei großen Puffern wird die Wahrscheinlichkeit von Stallings minimiert, während allerdings die Dauer eines Rebuffering-Events zunimmt. Testpersonen gaben Stalling als den Faktor an der das Streamingerlebnis am stärksten negativ beeinflusst. Weniger, längere Stallings werden häufigeren, kurzen Rebufferings bevorzugt.
+	\item Durch \textbf{Adaption} kann die Qualitätsstufe des konsumierten Mediums während der Wiedergabe gewechselt werden. Diese, im klassischen Videostreaming nicht vorhandene Dimension, wird von Testpersonen besonders bei häufigen Qualitätswechseln als störend empfunden. Adaption degradiert die QoE trotzdem weniger schwer als Stalling.
+\end{itemize}
+
+Insgesamt verbessert adpatives Streaming die QoE gegenüber klassischem Streaming stark. Wie in \cite{yao_empirical_2011} gezeigt wird Stalling, welches als größter Störeinfluss für QoE gilt, durch Bitratenadaption um bis zu 80\% reduziert. Im Laufe der Erforschung von QoE in DASH-Streams konnte eine starke Korrelation zwischen QoE und der verwendeten Puffer- sowie Segmentgröße gefunden werden. \cite{seufert_survey_2015}
 
 \subsection{Tools \& Referenzsoftware}
-CAdVise; Reference-Player (dash.js), libdash usw.
+Um Performancemessungen in eigenen DASH-Streams durchführen zu können und diese in Beziehung mit QoE-Parametern zu stellen wird in \cite{lederer_open_2012-1} ein \textit{Open-Source} Toolset vorgestellt. 
 
+Grundlage für die Realisierung eines DASH-Clients bietet die offizielle Referenzbibliothek \textit{libdash}. Wie in Grafik \ref{libdash_embedded} dargestellt stellt libdash durch seinen MPD-Parser eine objektorientierte Schnittstelle zur MPD bereit. Auch der Download von Segmenten erfolgt über den bibliotheksinternen HTTP Manager.
+
+\begin{center}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=12cm]{images/libdash_embedded.png}
+		\caption{https://doi.org/10.1109/CAIS.2019.8769444; Die Aufgaben von libdash im DASH-Client}
+		\label{libdash_embedded}
+	\end{figure}
+\end{center}
+
+Vollständig implementierte DASH-Clients stehen in der Form eines Plugins für den VLC-Media-Player \cite{muller_vlc_2011} oder eines JavaScript-basierten Web-Players, namentlich \textit{dash.js} \cite{rainer_seamless_2012-1}, zur Verfügung.
+
+Serverseitig kann Standard HTTP-Server-Software zur Auslieferung der Segmente wie beispielsweise \textit{nginx} oder \textit{Apache HTTP Server} verwendet werden. Die Generierung von DASH-konformen Segmentdateien und MPDs kann mit dem Tool \hyperref{https://github.com/gpac/gpac}{}{}{mp4box} durchgeführt werden. Mp4Box ist Teil des GPAC-Projekts, welches OpenSource-Tools für verschiedenste Multimediadomänen anbietet.
+
+Auf der Website des \textit{Dash Industry Forum}s können IBMFF-Segmente und MPD-Dateien mithilfe des \hyperref{https://conformance.dashif.org/}{}{}{Conformance-Tools} kostenlos validiert und getestet werden.
+
+\section{Konklusion}
+HTTP Adaptive Sstreaming (HAS) ist aus der modernen Medienlandschaft nicht mehr wegzudenken und hat mit MPEG-DASH einen offenen und gut unterstützten Standard erhalten. Im Verlauf dieser Seminararbeit haben wir uns mit den im Standard definierten Bausteinen von DASH, namentlich der Media Presentation Description und den Segmentformaten auseinandergesetzt und ein Grundverständnis für deren Zusammenspiel geschaffen.
+
+Anschließend wurde ein Überblick über verschiedene Arten von Algorithmen zur Bitratenadaption sowie Quality of Experience geboten. Abschließend folgte eine Vorstellung von verschiedenen Werkzeugen die den Leser dazu befähigen sollen selbst DASH-Streams zu erzeugen, zu verifizieren und deren Performance zu messen.
 
 % % % % % % % % % % % % % % % % % % % % % %
 
 % % % % % % % % % % % % % % % % % % % % % % 
 % Literaturverzeichnis
 % % % % % % % % % % % % % % % % % % % % % %
-
+\newpage
 \printbibliography
 
 \end{document}
