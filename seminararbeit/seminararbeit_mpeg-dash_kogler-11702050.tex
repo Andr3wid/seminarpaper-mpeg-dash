@@ -135,11 +135,11 @@
 \section*{Abstract}
 Wie der jährlich herausgegebene Cisco Visual Networking Index \cite{cisco_syst_inc_cisco_2017} zeigt, steigt der Anteil von Videodaten im Internet rapide. Mit Ende 2021 sollen Videodaten 80\% des globalen Gesamtdatenvolumens ausmachen \cite{cisco_syst_inc_cisco_2017}.
 
-Das vormals verbreitete \textit{Real-Time Transport Protocol} operiert unter der Annahme eines \textit{managed} IP-Netzwerks, wohingegen in modernen Umgebungen Content Distribution Networks (CDNs) verwendet werden \cite{sodagar_mpeg-dash_2011}. Während in managed IP-Netzwerken Server für die Verteilung der (Video-)Daten fest vorgegeben sind, können sich Server in CDNs dynamisch aufgrund einer Reihe von Kennzahlen regelmäßig ändern \cite{buyya_content_2008}. Um diesem Problem und der Vielfalt an proprietären Streamingstandards zu entgegnen, hat MPEG einen Standard für \textit{Dynamic Adaptive Streaming over HTTP}, auch bekannt als MPEG-DASH, entwickelt \cite{sodagar_mpeg-dash_2011}.
+Das vormals verbreitete \textit{Real-Time Transport Protocol} operiert unter der Annahme eines \textit{Managed}-IP-Netzwerks, wohingegen in modernen Umgebungen Content Distribution Networks (CDNs) verwendet werden \cite{sodagar_mpeg-dash_2011}. Während in Managed-IP-Netzwerken Server für die Verteilung der (Video-)Daten fest vorgegeben sind, können sich Server in CDNs dynamisch aufgrund einer Reihe von Kennzahlen regelmäßig ändern \cite{buyya_content_2008}. Um diesem Problem und der Vielfalt an proprietären Streamingstandards zu entgegnen, hat MPEG einen Standard für \textit{Dynamic Adaptive Streaming over HTTP}, auch bekannt als MPEG-DASH, entwickelt \cite{sodagar_mpeg-dash_2011}.
 
 Im Mittelpunkt steht dabei die dynamische Bitratenadaptierung der Videodaten je nach verfügbarer Bandbreite von Netzwerk und Endgerät. Da sich die verfügbare Bandbreite während der Wiedergabe des Videos ändern kann, müssen verschiedene Algorithmen zur dynamischen Selektion der Bitrate angewandt werden \cite{bentaleb_survey_2019}.
 
-Die eigentlichen Audio- und Video-Bitströme werden dabei in kleinere Segmente unterteilt welche wiederum in verschiedenen Qualitätsstufen für den Client zur Auswahl stehen. Jedes Segment besitzt eine eindeutige URL, über die es mittels HTTP GET-Request angefragt werden kann. Alle verfügbaren Segment-URLs werden in der \textit{Multimedia Presentation Description (MPD)} angegeben. Durch Einlesen dieser XML-Datei am Anfang des Streamingprozesses lernt der Client über alle verfügbaren Qualitätsstufen und kann diese gemäß des verwendeten Algorithmus auswählen \cite{sodagar_mpeg-dash_2011}.
+Die eigentlichen Audio- und Video-Bitströme werden dabei in kleinere Segmente unterteilt, welche wiederum in verschiedenen Qualitätsstufen für den Client zur Auswahl stehen. Jedes Segment besitzt eine eindeutige URL, über die es mittels HTTP GET-Request angefragt werden kann. Alle verfügbaren Segment-URLs werden in der \textit{Multimedia Presentation Description (MPD)} angegeben. Durch Einlesen dieser XML-Datei am Anfang des Streamingprozesses, lernt der Client über alle verfügbaren Segmente und Qualitätsstufen und kann diese gemäß des verwendeten Algorithmus auswählen \cite{sodagar_mpeg-dash_2011}.
 
 MPEG-DASH definiert in seiner Spezifikation lediglich die Segmentformate, den Aufbau der MPD-Datei und die verpflichtende Verwendung von HTTP/1.1 \cite{mpeg_dynamic_2013}. Viele weitere Aspekte wie beispielsweise Austausch der MPD, Codierung der Daten oder Verhalten bei der Bitratenadaption sind Gegenstand der jeweiligen Implementierung \cite{sodagar_mpeg-dash_2011}.
 
@@ -177,7 +177,7 @@ Beide Technologien setzen für die Übertragung auf der Applikationsebene das Hy
 \section{Einführung in MPEG-DASH}
 Um adaptives Streaming via MPEG-DASH zu ermöglichen wird die Mediendatei zunächst in mehrere, kleine Segmente zwischen zwei und zehn Sekunden Länge aufgeteilt \cite{international_organization_for_standardization_isoiec_nodate}. Jedes dieser Segmente wird anschließend in verschiedenen Qualitätsstufen kodiert. Segmente in einer höheren Qualitätsstufe benötigen mehr Speicherplatz und später auch mehr Bandbreite bei der Übertragung. Die so entstandenen Segmente werden schließlich auf einen Webserver hochgeladen, wo sie mittels HTTP GET-Requests angefragt werden können \cite{sodagar_mpeg-dash_2011}. 
 
-Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserver. Um dem Client einen Überblick über die verfügbaren Qualitätsstufen des angefragten Videos zu bieten wird vom Server zu Beginn die \textit{Media Presentation Description}, kurz \textit{MPD}, bereitgestellt. Ein Teil der Clientsoftware misst permanent die zur Verfügung stehende Bandbreite und bestimmt so in welcher Qualitätsstufe ein Segment angefragt wird. Dieser Teil der Software wird \textit{Bitrate Adaption Algorithm} genannt \cite{bentaleb_survey_2019}. 
+Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserver. Um dem Client einen Überblick über die verfügbaren Qualitätsstufen des angefragten Videos zu bieten wird vom Server zu Beginn die \textit{Media Presentation Description}, kurz \textit{MPD}, bereitgestellt. Ein Teil der Clientsoftware misst permanent die zur Verfügung stehende Bandbreite und bestimmt so in welcher Qualitätsstufe ein Segment angefragt wird. Dieser Teil der Software wird \textit{Bitrate Adaptation Algorithm} genannt \cite{bentaleb_survey_2019}. 
 
 	\begin{figure}
 		\centering
@@ -236,14 +236,14 @@ Jede MPD besitzt zumindest ein oder mehrere \elem{Period}-Elemente die dazu verw
 
 Sind beide Attribute nicht vorhanden werden die Starzeiten der jeweiligen Period-Elemente errechnet. Es wird dabei angenommen dass das erste \elem{Period}-Element implizit einen \attr{start}-Wert von \attr{'0S'} aufweist.
 
-\subsubsection{<AdaptionSet>}
-Jedes Period-Element beinhält eines oder mehrere \elem{AdaptionSet}-Elemente \cite{international_organization_for_standardization_isoiec_nodate}. Ein \elem{AdaptionSet} beinhält inhaltlich gleiche \textit{Representation}-Elemente. Als \textit{inhaltlich gleich} wird in diesem Kontext verstanden, dass die beinhalteten \elem{Representation}-Elemente den gleichen Zeitabschnitt abdecken. Man sagt auch sie verhalten sich \textit{perzeptiv gleich zueinander}.
+\subsubsection{<AdaptationSet>}
+Jedes Period-Element beinhält eines oder mehrere \elem{AdaptationSet}-Elemente \cite{international_organization_for_standardization_isoiec_nodate}. Ein \elem{AdaptationSet} beinhält inhaltlich gleiche \textit{Representation}-Elemente. Als \textit{inhaltlich gleich} wird in diesem Kontext verstanden, dass die beinhalteten \elem{Representation}-Elemente den gleichen Zeitabschnitt abdecken. Man sagt auch sie verhalten sich \textit{perzeptiv gleich zueinander}.
 
 Beispiele dafür wären mehrere Audiospuren in verschiedenen Sprachen die den gleichen Dialog / Teil eines Dialogs abdecken oder ein Teil eines Videos in verschiedenen Auflösungen.
 
-Auch wenn es möglich ist verschiedene Medientypen (Audio, Video, Untertitel) in dem selben \elem{AdaptionSet} anzugeben, werden \elem{AdaptionSet}s in der Praxis meist homogen gehalten. In einem solchen Fall kann der Medientyp mithilfe des \textbf{contentType}-Attributs für das gesamte AdaptionSet spezifiziert werden. Zulässige Werte sind nach IETF RFC 6838 zulässige \textit{Media-types}.
+Auch wenn es möglich ist verschiedene Medientypen (Audio, Video, Untertitel) in dem selben \elem{AdaptationSet} anzugeben, werden \elem{AdaptationSet}s in der Praxis meist homogen gehalten. In einem solchen Fall kann der Medientyp mithilfe des \textbf{contentType}-Attributs für das gesamte AdaptationSet spezifiziert werden. Zulässige Werte sind nach IETF RFC 6838 zulässige \textit{Media-types}.
 
-Bei inhomogenen \elem{AdaptionSets} müssen Inhalte durch \elem{ContentComponent}-Elemente nach ihrem contentType kategorisierbar sein.
+Bei inhomogenen \elem{AdaptationSets} müssen Inhalte durch \elem{ContentComponent}-Elemente nach ihrem contentType kategorisierbar sein.
 
 \subsubsection{<Representation>}
 Ein \elem{Representation}-Element beinhält eine Menge an Medieninhalten welche die Dauer des übergeordneten \elem{Period}-Elements ab dem errechneten oder angegebenen Start des \elem{Period}-Elements umfasst \cite{international_organization_for_standardization_isoiec_nodate}.
@@ -258,7 +258,7 @@ Jedes \elem{Representation}-Element beinhält einen oder mehrere segmentierte Me
 \elem{Represenation}-Elemente können auch zusammengesetzte Medienströme beinhalten (zB Audio und Video in einem Strom). In diesem Fall werden \textbf{Sub-Representation}-Elemente eingeführt die Informationen über die enthaltenen Komponenten preisgeben.
 
 \subsubsection{Gemeinsame Attribute und Elemente}
-Eine Reihe von Attributen und Elementen kann sowohl auf der Ebene des \elem{AdaptionSets} als auch in \elem{(Sub-)Representation}-Elementen angegeben werden. Diese zusätzlichen Daten geben viel über die Natur der enthaltenen Segmente preis und sind großteils vom enthaltenen Medientyp abhängig.
+Eine Reihe von Attributen und Elementen kann sowohl auf der Ebene des \elem{AdaptationSets} als auch in \elem{(Sub-)Representation}-Elementen angegeben werden. Diese zusätzlichen Daten geben viel über die Natur der enthaltenen Segmente preis und sind großteils vom enthaltenen Medientyp abhängig.
 
 \begin{center}
 	\begin{tabular}{| c | c | c |}
@@ -280,7 +280,7 @@ Eine Reihe von Attributen und Elementen kann sowohl auf der Ebene des \elem{Adap
 \end{center}
 
 \subsubsection{Segmente und Segmentinformationen}
-Informationen über die Segmente innerhalb eines \elem{Representation}-Elements werden durch die Elemente \elem{SegmentBase}, \elem{SegmentList} und \elem{SegmentTemplate} repräsentiert \cite{international_organization_for_standardization_isoiec_nodate}. Jedes der drei Elemente kann sowohl innerhalb einer \elem{Representation} als auch innerhalb eines \elem{AdaptionSets} oder einer \elem{Period} vorkommen. Die letzteren beiden Ansätze werden für die Repräsentation von \textit{defaults}, also allgemeingültigen Werten, verwendet. Es darf nur eines der drei Elemente auf einer Ebene vorhanden sein.
+Informationen über die Segmente innerhalb eines \elem{Representation}-Elements werden durch die Elemente \elem{SegmentBase}, \elem{SegmentList} und \elem{SegmentTemplate} repräsentiert \cite{international_organization_for_standardization_isoiec_nodate}. Jedes der drei Elemente kann sowohl innerhalb einer \elem{Representation} als auch innerhalb eines \elem{AdaptationSets} oder einer \elem{Period} vorkommen. Die letzteren beiden Ansätze werden für die Repräsentation von \textit{defaults}, also allgemeingültigen Werten, verwendet. Es darf nur eines der drei Elemente auf einer Ebene vorhanden sein.
 
 \begin{itemize}
 	\item \elem{SegmentBase} allein bietet nur dann ausreichend Segmentinformation wenn jede Representation ein einziges Segment beinhält.
@@ -399,13 +399,13 @@ type="static" availabilityStartTime="2015-08-04T09:33:14.000Z" publishTime="2015
 </MPD>
 \end{lstlisting}
 
-Im Root-Tag der gelisteten MPD wird eine minimale Pufferzeit von einer Sekunde angegeben. Die Datei besteht nur aus einer einzigen \elem{Period} die die gesamte Dauer des Videos umfasst, listet jedoch zwei verschiedene \elem{AdaptionSet}s. 
+Im Root-Tag der gelisteten MPD wird eine minimale Pufferzeit von einer Sekunde angegeben. Die Datei besteht nur aus einer einzigen \elem{Period} die die gesamte Dauer des Videos umfasst, listet jedoch zwei verschiedene \elem{AdaptationSet}s. 
 
-Anhand des \attr{mimeType}s lässt sich erkennen dass es sich bei ersterem \elem{AdaptionSet} um Videodaten handelt. Außerdem verrät das \attr{codec}-Attribut dass die Daten mit H.264 kodiert wurden. Eine Liste der zulässigen Parameter für \attr{codec} findet sich im RFC 6381. Für eine Reihe verschiedener Auflösungen und Bitraten finden sich in dem \elem{AdaptionSet} unterschiedliche \elem{Representation}s.
+Anhand des \attr{mimeType}s lässt sich erkennen dass es sich bei ersterem \elem{AdaptationSet} um Videodaten handelt. Außerdem verrät das \attr{codec}-Attribut dass die Daten mit H.264 kodiert wurden. Eine Liste der zulässigen Parameter für \attr{codec} findet sich im RFC 6381. Für eine Reihe verschiedener Auflösungen und Bitraten finden sich in dem \elem{AdaptationSet} unterschiedliche \elem{Representation}s.
 
-Das zweite \elem{AdaptionSet} beinhält die zugehörigen Audiodaten, welche mithilfe von MP4-Audio (\textbf{A}dvanced \textbf{A}udio \textbf{C}oding) kodiert wurden.
+Das zweite \elem{AdaptationSet} beinhält die zugehörigen Audiodaten, welche mithilfe von MP4-Audio (\textbf{A}dvanced \textbf{A}udio \textbf{C}oding) kodiert wurden.
 
-Beide \elem{AdaptionSet}s verwenden für die Auflösung der URL zu den jeweiligen Segmentdaten \elem{SegmentTemplate}s mit den besprochenen Ersetzungsidentifikatoren. Wie in \ref{segment_formats} erwähnt wird, wird zu Beginn des Streams ein Initialisierungssegment gesendet welches von der Engine die die Mediendaten abspielen soll verarbeitet wird. Dieses Segment wird in der Praxis gerne von den restlichen Mediensegmenten separat behandelt. Aus diesem Grund kann mit \attr{initialization} ein dediziertes URL-Template für das Initialisierungssegment angelegt werden.
+Beide \elem{AdaptationSet}s verwenden für die Auflösung der URL zu den jeweiligen Segmentdaten \elem{SegmentTemplate}s mit den besprochenen Ersetzungsidentifikatoren. Wie in \ref{segment_formats} erwähnt wird, wird zu Beginn des Streams ein Initialisierungssegment gesendet welches von der Engine die die Mediendaten abspielen soll verarbeitet wird. Dieses Segment wird in der Praxis gerne von den restlichen Mediensegmenten separat behandelt. Aus diesem Grund kann mit \attr{initialization} ein dediziertes URL-Template für das Initialisierungssegment angelegt werden.
 
 
 \subsection{Segmentformate}
@@ -481,10 +481,13 @@ Profile können wieder je nach zugrundeliegendem Containerformat in zwei Kategor
 	\item \textbf{IBMFF On Demand (\attr{urn:mpeg:dash:profile:isoff-on-demand:2011})}: On-Demand Medien liegen zum Zeitpunkt des Abrufs bereits vollständig vor. D.h. dass im Gegensatz zu Live-Medien kein Inhalt mehr zusätzlich generiert wird. Haupteinschränkung in diesem Profil ist, dass \elem{Representation}s nur durch ein einziges Segment dargestellt werden dürfen. Dadurch wird die Verwendung von \elem{SegmentList} und \elem{SegmentTemplate} ausgeschlossen. Das \attr{type}-Attribut in \elem{MPD} muss außerdem den Wert \attr{'static'} aufweisen. Genauere Ausführungen können im Standard nachgelesen werden.
 	\item \textbf{IBMFF Live (\attr{urn:mpeg:dash:profile:isoff-live:2011)}}: Um die Latenz für den Live-Einsatz möglichst niedrig zu halten, werden Segmente von sehr kurzer Dauer erzeugt. Diese lassen sich schneller kodieren. Außerdem wird empfohlen innerhalb der MPD ein \elem{SegmentTemplate} zu verwenden. Ansonsten muss vor jedem Segment-Request auch die MPD upgedated werden. Weiters wird die Verwendung von Indexsegmenten ausgeschlossen. Alle Mediensegmente müssen also selbstinitialisierend sein.
 	\item \textbf{MPEG-2 TS main (\attr{urn:mpeg:dash:profile:mp2t-main:2011})}: Verwendete Elemente der MPD und Segmentformate werden, mit Ausnahme der Verwendung von MPEG-2 TS statt IBMFF, nur sehr gering eingeschränkt. \elem{Representation}s die ein \elem{SegmentTimeline}-Element beinhalten werden ignoriert. Die Verwendung von Indexsegmenten wird stark empfohlen.
-	\item \textbf{MPEG-2 TS simple (\attr{urn:mpeg:dash:profile:mp2t-simple:2011})}: Ziel dieses Profils ist es, die Implementierung des Wechsels zu einer anderen \elem{Representation} zu vereinfachen. Das wird erreicht indem die Segmentstruktur stärker eingeschränkt wird. Software nach ISO/IEC 13818-1 (Generic coding of moving pictures and associated audio) sollte in der Lage sein den Stream durch Konkatenation aller Segmente verschiedener \elem{Representation}s im selben \elem{AdaptionSet} wiederzugeben. PSI (Program specific metadata), welche mitunter PMT und PAT enthält, muss dafür in allen \elem{Representation}s identisch sein. Die Verwendung von Indexsegmenten und \elem{SegmentTemplate} werden zudem stark empfohlen.
+	\item \textbf{MPEG-2 TS simple (\attr{urn:mpeg:dash:profile:mp2t-simple:2011})}: Ziel dieses Profils ist es, die Implementierung des Wechsels zu einer anderen \elem{Representation} zu vereinfachen. Das wird erreicht indem die Segmentstruktur stärker eingeschränkt wird. Software nach ISO/IEC 13818-1 (Generic coding of moving pictures and associated audio) sollte in der Lage sein den Stream durch Konkatenation aller Segmente verschiedener \elem{Representation}s im selben \elem{AdaptationSet} wiederzugeben. PSI (Program specific metadata), welche mitunter PMT und PAT enthält, muss dafür in allen \elem{Representation}s identisch sein. Die Verwendung von Indexsegmenten und \elem{SegmentTemplate} werden zudem stark empfohlen.
 \end{itemize}
  
 Für Broadcast-TV existiert zudem ein eigenes, auf IBMFF basierendes Profil. Ebenfalls existieren zum \textit{Live}- und \textit{On-Demand}-Profil \textit{extended} Versionen die unterstützte Features weniger stark einschränken. Diese können bei Bedarf im Standard nachgelesen werden.
+
+\section{Technologien rund um MPEG-DASH}
+Um MPEG-DASH funktionstüchtig und messbar für den praktischen Einsatz zu machen, bedarf es einiger Technologien die nicht konkret im oder durch den Standard definiert werden. Auf diese Technologien, welche mitunter für Übertragung und Bitratenadaption zuständig sind, möchten wir im Folgenden überblicksmäßig eingehen.
 
 \subsection{HTTP für Videostreaming}
 Bisweilen wurde stark darauf eingegangen welchen Standards Clients und Server im Streamingprozess zu folgen haben. Zur Kommunikation zwischen den beiden Instanzen sind jedoch Netzwerkprotokolle zuständig.
@@ -528,7 +531,7 @@ Seufert et al. \cite{seufert_survey_2015} unterteilt QoE-Einflussfaktoren in DAS
 \begin{itemize}
 	\item \textbf{Initial Delay} nennt man die Zeit die verstreicht bis ein Multimedia-Client mit dem Playback beginnen kann. Diese Verzögerung zu Beginn des Streamingprozesses entsteht da initial der Puffer des Clients gefüllt werden muss. Diese Wartezeit beeinflusst die QoE nur in geringem Ausmaß. 90\% der NutzerInnen geben an dass, sie Wartezeiten zu Beginn des Videos einer Unterbrechung des laufenden Playbacks (\textit{Stalling}) bevorzugen. Anders verhält sich dieser Parameter wenn viele, kurze Videos nur zu Teilen konsumiert werden (\textit{Video Browsing}).
 	\item Als \textbf{Stalling} bezeichnet man einen Stopp des Videoplaybacks aufgrund von Pufferunterläufen. Die Größe des Puffers spielt hierbei eine zentrale Rolle. Bei großen Puffern wird die Wahrscheinlichkeit von Stallings minimiert, während allerdings die Dauer eines Rebuffering-Events zunimmt. Testpersonen gaben Stalling als den Faktor an der das Streamingerlebnis am stärksten negativ beeinflusst. Weniger, längere Stallings werden häufigeren, kurzen Rebufferings bevorzugt.
-	\item Durch \textbf{Adaption} kann die Qualitätsstufe des konsumierten Mediums während der Wiedergabe gewechselt werden. Diese, im klassischen Videostreaming nicht vorhandene Dimension, wird von Testpersonen besonders bei häufigen Qualitätswechseln als störend empfunden. Adaption degradiert die QoE trotzdem weniger schwer als Stalling.
+	\item Durch \textbf{Adaptation} kann die Qualitätsstufe des konsumierten Mediums während der Wiedergabe gewechselt werden. Diese, im klassischen Videostreaming nicht vorhandene Dimension, wird von Testpersonen besonders bei häufigen Qualitätswechseln als störend empfunden. Adaptation degradiert die QoE trotzdem weniger schwer als Stalling.
 \end{itemize}
 
 Insgesamt verbessert adpatives Streaming die QoE gegenüber klassischem Streaming stark. Wie in \cite{yao_empirical_2011} gezeigt wird Stalling, welches als größter Störeinfluss für QoE gilt, durch Bitratenadaption um bis zu 80\% reduziert. Im Laufe der Erforschung von QoE in DASH-Streams konnte eine starke Korrelation zwischen QoE und der verwendeten Puffer- sowie Segmentgröße gefunden werden \cite{seufert_survey_2015}.
