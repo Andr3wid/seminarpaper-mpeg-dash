@@ -177,7 +177,7 @@ Beide Technologien setzen für die Übertragung auf der Applikationsebene das Hy
 \section{Einführung in MPEG-DASH}
 Um adaptives Streaming via MPEG-DASH zu ermöglichen, wird die Mediendatei zunächst in mehrere, kleine Segmente zwischen zwei und zehn Sekunden Länge aufgeteilt \cite{international_organization_for_standardization_isoiec_nodate}. Jedes dieser Segmente wird anschließend in verschiedenen Qualitätsstufen kodiert. Segmente in einer höheren Qualitätsstufe benötigen mehr Speicherplatz und später auch mehr Bandbreite bei der Übertragung. Die so entstandenen Segmente werden schließlich auf einen Webserver hochgeladen, wo sie mittels HTTP GET-Requests angefragt werden können \cite{sodagar_mpeg-dash_2011}. 
 
-Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserver. Um dem Client einen Überblick über die verfügbaren Qualitätsstufen des angefragten Videos zu bieten wird vom Server zu Beginn die \textit{Media Presentation Description}, kurz \textit{MPD}, bereitgestellt. Ein Teil der Clientsoftware misst permanent die zur Verfügung stehende Bandbreite und bestimmt so in welcher Qualitätsstufe ein Segment angefragt wird. Dieser Teil der Software wird \textit{Bitrate Adaptation Algorithm} genannt \cite{bentaleb_survey_2019}. 
+Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserver. Um dem Client einen Überblick über die verfügbaren Qualitätsstufen des angefragten Videos zu bieten, wird vom Server zu Beginn die \textit{Media Presentation Description}, kurz \textit{MPD}, bereitgestellt. Ein Teil der Clientsoftware misst permanent die zur Verfügung stehende Bandbreite und bestimmt so, in welcher Qualitätsstufe ein Segment angefragt wird. Dieser Teil der Software wird \textit{Bitrate Adaptation Algorithm} genannt \cite{bentaleb_survey_2019}. 
 
 	\begin{figure}
 		\centering
@@ -187,11 +187,11 @@ Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserv
 
 
 \subsection{Media Presentation Description (MPD)}
-Bevor der Streamingprozess beginnt muss die MPD zwischen Client und Server ausgetauscht werden. Der Austauschprozess wird dabei nicht vom Standard vorgegeben sondern ist von der Implementierung des jeweiligen Anbieters abhängig \cite{sodagar_mpeg-dash_2011}.
+Bevor der Streamingprozess beginnt, muss die MPD zwischen Client und Server ausgetauscht werden. Der Austauschprozess wird dabei nicht vom Standard vorgegeben, sondern ist von der Implementierung des jeweiligen Anbieters abhängig \cite{sodagar_mpeg-dash_2011}.
 
-Eine MPD-Datei dient als \textit{Inhaltsverzeichnis} für den Client, bietet einen Überblick über sämtliche vorhandene Mediendaten (Video, Audio, Untertitel), deren Eigenschaften und die zugehörige URL an die HTTP-Requests gestellt werden um das jeweilige Segment zu erhalten \cite{international_organization_for_standardization_isoiec_nodate}.
+Eine MPD-Datei dient als \textit{Inhaltsverzeichnis} für den Client, bietet einen Überblick über sämtliche vorhandene Mediendaten (Video, Audio, Untertitel), deren Eigenschaften und die zugehörigen URLs an die HTTP-Requests gestellt werden, um das jeweilige Segment zu erhalten \cite{international_organization_for_standardization_isoiec_nodate}.
 
-Die Dateistruktur wird strikt durch den Standard vorgegeben. MPD-Dateien folgen einem durch den Standard vorgegebenen XML-Schema. Abbildung \ref{mpd_components} veranschaulicht die wichtigsten Komponenten einer MPD auf die in den kommenden Abschnitten näher eingegangen wird:
+Die Dateistruktur wird strikt durch den Standard vorgegeben. MPD-Dateien folgen einem durch den Standard vorgegebenen XML-Schema. Abbildung \ref{mpd_components} veranschaulicht die wichtigsten Komponenten einer MPD, auf die in den kommenden Abschnitten näher eingegangen wird.
 
 	\begin{figure}[ht]
 		\centering
@@ -200,62 +200,65 @@ Die Dateistruktur wird strikt durch den Standard vorgegeben. MPD-Dateien folgen 
 		\label{mpd_components}
 	\end{figure}
 
-\textbf{Notiz:} Es werden pro Abschnitt nur Attribute und Sub-Elemente besprochen die laut ISO/IEC 23009-1 als \textit{Mandatory}, also unbedingt notwendig, gekennzeichnet sind oder dem Zweck eines anschaulichen Beispiels dienen. Für eine vollständige Übersicht wird auf den offiziellen Standard ISO/IEC 23009 Part 1 (Media Presentation Description and Segment formats) verwiesen.
+\textbf{Notiz:} Es werden pro Abschnitt nur Attribute und Sub-Elemente besprochen die laut ISO/IEC 23009-1 als \textit{Mandatory}, also unbedingt notwendig, gekennzeichnet sind oder dem Zweck eines anschaulichen Beispiels dienen. Für eine vollständige Übersicht wird auf den offiziellen Standard ISO/IEC 23009 Part 1 (Media Presentation Description and Segment Formats) verwiesen.
 
 \subsubsection{XML-Schema}
 
 \subsubsection{Root-Element <MPD>}
-Jede MPD besitzt genau ein einziges \elem{MPD}-Tag als Root-Element welches auf die XML-Deklaration in der ersten Zeile und der Einbindung des Schemas / Angabe des Namespaces folgt \cite{international_organization_for_standardization_isoiec_nodate}.
+Jede MPD besitzt genau ein einziges \elem{MPD}-Tag als Root-Element, welches auf die XML-Deklaration in der ersten Zeile und der Einbindung des Schemas / Angabe des Namespaces folgt \cite{international_organization_for_standardization_isoiec_nodate}.
 Folgende Attribute sind für ein valides \elem{MPD}-Tag zwingend notwendig:
 
 \begin{itemize}
-	\item \attr{profiles}: Listet die unterstützten Medienprofile auf. Eine Übersicht über verfügbare Profile sowie deren Notation werden in Abschnitt \ref{profiles} behandelt.
-	\item \attr{minBufferTime}: Minimiale Zeitdauer an Segmenten die ein Client im Puffer bereithalten muss um Playback starten zu können. Angabe als ISO 8601-Duration. Details zum Format im Abschnitt \ref{iso8601_duration}.
+	\item \attr{profiles}: Listet die unterstützten Medienprofile auf. Eine Übersicht über verfügbare Profile sowie deren Notation wird in Abschnitt \ref{profiles} behandelt.
+	\item \attr{minBufferTime}: Minimale Zeitdauer an Segmenten, die ein Client im Puffer bereithalten muss um Playback starten zu können. Angabe als ISO 8601-Duration. Details zum Format im Abschnitt \ref{iso8601_duration}.
 \end{itemize}
 
-Direkt unter dem Root-Tag können außerdem \elem{BaseURL}-Elemente spezifiziert werden. Eine \elem{BaseURL} kann alternative URLs für Mediendaten liefern.
-Die Basis-URL wird gemäß IETF RFC3986 (5.1.1 - 5.1.4) eruiert. Mit folgenden Schritten wird versucht eine Basis-URL zu finden:
+Direkt unter dem Root-Tag können außerdem \elem{BaseURL}-Elemente spezifiziert werden. Eine \elem{BaseURL} kann eine oder mehrere Basis-URLs für Mediendaten liefern. Eine Angabe von mehreren \elem{BaseURL}s könnte beispielsweise sinnvoll sein, wenn die Quelle der Mediensegmente auf die geographischen Gegebenheiten des Clients angepasst werden sollten. 
+
+Existiert kein \elem{BaseURL}-Element mit absolutem Pfad in der gesamten MPD, so wird versucht, die Quelle (auch als \textit{Basis-URL} bezeichnet) gemäß IETF RFC3986 (5.1.1 - 5.1.4) zu ermitteln:
+
+\label{base_url_finding}
 
 \begin{enumerate}
-	\item Ein BaseURL-Element verweist auf eine absolute URL.
+	\item Ein \elem{BaseURL}-Element verweist auf eine absolute URL.
 	\item Ein anderes gekapseltes Element verweist auf eine absolute URL. 
 	\item Die URL welche benutzt wurde um die MPD anzufragen wird als Basis-URL gewählt.
 	\item Die Applikation welche die MPD angefragt hat, bietet eine Standard Basis-URL an.
 \end{enumerate}
 
-Kann nach dieser Vorgehensweise keine Basis-URL bestimmt werden, wird das MPD nicht geparsed und als fehlerhaft abgewiesen.
+Kann nach dieser Vorgehensweise keine Basis-URL bestimmt werden, wird die MPD nicht weiter verarbeitet und als fehlerhaft abgewiesen.
 
 \subsubsection{<Period>}
 Jede MPD besitzt zumindest ein oder mehrere \elem{Period}-Elemente die dazu verwendet werden Inhalte aufzuteilen. So können beispielsweise Werbeinhalte vom eigentlichen Inhalt abgegrenzt werden. Auch Szenen eines Films könnten in mehrere \elem{Period}-Elemente aufgeteilt werden \cite{international_organization_for_standardization_isoiec_nodate}.
 
 \elem{Period}-Elemente besitzen nur optionale Attribute von denen zwei gängige dennoch erwähnt werden sollen:
 \begin{itemize}
-	\item \attr{start:} Wird verwendet um jedes Mediensegment einem Zeitpunkt auf der Zeitleiste zuzuordnen.
-	\item \attr{duration:} Wird verwendet um die Startzeit des nächsten Period-Elements zu berechnen.
+	\item \attr{start:} Wird verwendet, um jedes Mediensegment einem Start-Zeitpunkt auf der Zeitleiste zuzuordnen.
+	\item \attr{duration:} Wird verwendet, um die Startzeit des nächsten Period-Elements zu berechnen.
 \end{itemize}
 
-Sind beide Attribute nicht vorhanden werden die Starzeiten der jeweiligen Period-Elemente errechnet. Es wird dabei angenommen dass das erste \elem{Period}-Element implizit einen \attr{start}-Wert von \attr{'0S'} aufweist.
+Sind beide Attribute nicht vorhanden, werden die Starzeiten der jeweiligen Period-Elemente errechnet. Es wird dabei angenommen, dass das erste \elem{Period}-Element implizit einen \attr{start}-Wert von \attr{'0S'} aufweist.
 
 \subsubsection{<AdaptationSet>}
-Jedes Period-Element beinhält eines oder mehrere \elem{AdaptationSet}-Elemente \cite{international_organization_for_standardization_isoiec_nodate}. Ein \elem{AdaptationSet} beinhält inhaltlich gleiche \textit{Representation}-Elemente. Als \textit{inhaltlich gleich} wird in diesem Kontext verstanden, dass die beinhalteten \elem{Representation}-Elemente den gleichen Zeitabschnitt abdecken. Man sagt auch sie verhalten sich \textit{perzeptiv gleich zueinander}.
+Jedes Period-Element enthält eines oder mehrere \elem{AdaptationSet}-Elemente \cite{international_organization_for_standardization_isoiec_nodate}. Ein \elem{AdaptationSet} enthält inhaltlich gleiche \textit{Representation}-Elemente. Als \textit{inhaltlich gleich} wird in diesem Kontext verstanden, dass die beinhalteten \elem{Representation}-Elemente den gleichen Zeitabschnitt abdecken. Man sagt auch, sie verhalten sich \textit{perzeptiv gleich zueinander}.
 
-Beispiele dafür wären mehrere Audiospuren in verschiedenen Sprachen die den gleichen Dialog / Teil eines Dialogs abdecken oder ein Teil eines Videos in verschiedenen Auflösungen.
+Beispiele dafür wären mehrere Audiospuren in verschiedenen Sprachen, die den gleichen Dialog / Teil eines Dialogs abdecken, oder ein Teil eines Videos in verschiedenen Auflösungen.
 
-Auch wenn es möglich ist verschiedene Medientypen (Audio, Video, Untertitel) in dem selben \elem{AdaptationSet} anzugeben, werden \elem{AdaptationSet}s in der Praxis meist homogen gehalten. In einem solchen Fall kann der Medientyp mithilfe des \textbf{contentType}-Attributs für das gesamte AdaptationSet spezifiziert werden. Zulässige Werte sind nach IETF RFC 6838 zulässige \textit{Media-types}.
+Auch wenn es möglich ist, verschiedene Medientypen (Audio, Video, Untertitel) in demselben \elem{AdaptationSet} anzugeben, werden \elem{AdaptationSet}s in der Praxis meist homogen gehalten. In einem solchen Fall kann der Medientyp mithilfe des \textbf{contentType}-Attributs für das gesamte AdaptationSet spezifiziert werden. Zulässige Werte sind nach IETF RFC 6838 zulässige \textit{Media-types}.
 
 Bei inhomogenen \elem{AdaptationSets} müssen Inhalte durch \elem{ContentComponent}-Elemente nach ihrem contentType kategorisierbar sein.
 
 \subsubsection{<Representation>}
-Ein \elem{Representation}-Element beinhält eine Menge an Medieninhalten welche die Dauer des übergeordneten \elem{Period}-Elements ab dem errechneten oder angegebenen Start des \elem{Period}-Elements umfasst \cite{international_organization_for_standardization_isoiec_nodate}.
+Ein \elem{Representation}-Element enthält eine Menge an Medieninhalten, welche die Dauer des übergeordneten \elem{Period}-Elements ab dem errechneten oder angegebenen Start des \elem{Period}-Elements umfasst \cite{international_organization_for_standardization_isoiec_nodate}.
 
-Jedes \elem{Representation}-Element beinhält einen oder mehrere segmentierte Medienströme, wobei jeder Stream eine kodierte Komponente (e.g. Audio, Video, Untertitel) repräsentiert. Folgende Attribute müssen für ein valides \elem{Representation}-Element vorhanden sein:
+Jedes \elem{Representation}-Element enthält einen oder mehrere segmentierte Medienströme, wobei jeder Stream eine kodierte Komponente (z.B. Audio, Video, Untertitel) repräsentiert. Folgende Attribute müssen für ein valides \elem{Representation}-Element vorhanden sein:
 
 \begin{itemize}
-	\item \attr{id:} Das \attr{id}-Attribut muss innerhalb eines Period-Elements einzigartig sein, es sei denn ein funktional äquivalentes \elem{Representation}-Element existiert innerhalb der Period.
-	\item \attr{bandwidth:} Gibt die Bandbreite in Bits pro Sekunde (bps) an die für diese Qualitätsstufe empfohlen wird.
+	\item \attr{id:} Das \attr{id}-Attribut muss innerhalb eines Period-Elements einzigartig sein, es sei denn, ein funktional äquivalentes \elem{Representation}-Element existiert innerhalb der Period.
+	\item \attr{bandwidth:} Gibt die Bandbreite in Bits pro Sekunde (bps) an, die für diese Qualitätsstufe empfohlen wird.
 \end{itemize}
 
-\elem{Represenation}-Elemente können auch zusammengesetzte Medienströme beinhalten (zB Audio und Video in einem Strom). In diesem Fall werden \textbf{Sub-Representation}-Elemente eingeführt die Informationen über die enthaltenen Komponenten preisgeben.
+\elem{Representation}-Elemente können auch zusammengesetzte Medienströme beinhalten (zB Audio und Video in einem Strom). In diesem Fall werden \textbf{Sub-Representation}-Elemente eingeführt, die Informationen über die enthaltenen Komponenten preisgeben.
 
 \subsubsection{Gemeinsame Attribute und Elemente}
 Eine Reihe von Attributen und Elementen kann sowohl auf der Ebene des \elem{AdaptationSets} als auch in \elem{(Sub-)Representation}-Elementen angegeben werden. Diese zusätzlichen Daten geben viel über die Natur der enthaltenen Segmente preis und sind großteils vom enthaltenen Medientyp abhängig.
@@ -270,9 +273,9 @@ Eine Reihe von Attributen und Elementen kann sowohl auf der Ebene des \elem{Adap
 		\hline
 		\attr{height}                & video        & vertikale Größe (Anzahl an Samples / Pixel)                      \\
 		\hline
-		\attr{sar}                   & video        & \textbf{s}ample \textbf{a}spect \textbf{r}atio; Seitenverhätlnis \\
+		\attr{sar}                   & video        & \textbf{s}ample \textbf{a}spect \textbf{r}atio; Seitenverhältnis \\
 		\hline
-		\attr{audioSamplingRate}     & audio        & Ganzzahl; Samples pro Sekunde                                    \\
+		\attr{audioSamplingRate}     & audio        & Abtastrate; Samples pro Sekunde                                    \\
 		\hline
 		\attr{mimeType}              & alle         & Muss zwingend in zumindest einem Element vorhanden sein.         \\
 		\hline
@@ -283,10 +286,12 @@ Eine Reihe von Attributen und Elementen kann sowohl auf der Ebene des \elem{Adap
 Informationen über die Segmente innerhalb eines \elem{Representation}-Elements werden durch die Elemente \elem{SegmentBase}, \elem{SegmentList} und \elem{SegmentTemplate} repräsentiert \cite{international_organization_for_standardization_isoiec_nodate}. Jedes der drei Elemente kann sowohl innerhalb einer \elem{Representation} als auch innerhalb eines \elem{AdaptationSets} oder einer \elem{Period} vorkommen. Die letzteren beiden Ansätze werden für die Repräsentation von \textit{defaults}, also allgemeingültigen Werten, verwendet. Es darf nur eines der drei Elemente auf einer Ebene vorhanden sein.
 
 \begin{itemize}
-	\item \elem{SegmentBase} allein bietet nur dann ausreichend Segmentinformation wenn jede Representation ein einziges Segment beinhält.
-	\item \elem{SegmentList}-Elemente beinhalten ein oder mehrere \elem{SegmentURL}-Elemente die mittels des \attr{media}-Attributs auf den Dateinamen des jeweiligen Segments verweisen. Optional kann auch ein \textit{mediaRange}-Attribut angegeben werden, welches die Byte-Range angibt die durch das \attr{media}-Attribut referenziert wird.
-	\item Wenn sich Segment-URLs eine gemeinsame Struktur teilen, können diese mithilfe eines \elem{SegmentTemplate}-Elements dargestellt werden. In diesem Fall beinhält \attr{media} ein URL-Template mit Ersetzungsidentifikatoren aus dem alle Segment-URLs generiert werden. Einige Beispiele dafür sind in Tabelle \ref{template_substitutions} angegeben. 
+	\item \elem{SegmentBase} allein bietet nur dann ausreichend Segmentinformation, wenn jede Representation ein einziges Segment beinhält.
+	\item \elem{SegmentList}-Elemente beinhalten ein oder mehrere \elem{SegmentURL}-Elemente, die mittels des \attr{media}-Attributs auf den Dateinamen des jeweiligen Segments verweisen. Optional kann auch ein \textit{mediaRange}-Attribut angegeben werden, welches die Byte-Range angibt, die durch das \attr{media}-Attribut referenziert wird.
+	\item Wenn sich Segment-URLs eine gemeinsame Struktur teilen, können diese mithilfe eines \elem{SegmentTemplate}-Elements dargestellt werden. In diesem Fall enthält \attr{media} ein URL-Template mit Ersetzungsidentifikatoren, aus dem alle Segment-URLs generiert werden. Einige Beispiele dafür sind in Tabelle \ref{template_substitutions} angegeben. 
 \end{itemize}
+
+Ein Beispiel dafür befindet sich in Abschnitt \ref{mpd_example}.
 
 \begin{center}
 	\begin{table}[ht]
@@ -311,7 +316,7 @@ Informationen über die Segmente innerhalb eines \elem{Representation}-Elements 
 
 \subsubsection{Zeitangaben in MPDs}
 \label{iso8601_duration}
-Jegliche Zeitangaben halten sich an ISO 8601, dem \textit{Data elements and interchange formats – Information interchange – Representation of dates and times}-Standard. Häufig werden Angaben für Zeitspannen in der MPD notiert. Dafür bietet ISO 8601 den Unterpunkt \textit{Periods}. Ein Beispiel dafür bietet die \textit{minBufferTime} im oben gelisteten Beispiel. Grundsätzlicher Aufbau:
+Jegliche Zeitangaben halten sich an ISO 8601 \cite{iso_8601}, dem \textit{Data Elements and Interchange Formats – Information Interchange – Representation of Dates and Times}-Standard. Häufig werden Angaben für Zeitspannen in der MPD notiert. Dafür bietet ISO 8601 den Unterpunkt \textit{Periods}. Ein praktischer Einsatz dieser Zeitangaben wird in Abschnitt \ref{mpd_example} (z.B. bei \attr{minBufferTime} oder \attr{mediaPresentationDuration}) veranschaulicht. Grundsätzlicher Aufbau:
 
 -- P<date>T<time>
 
@@ -342,7 +347,7 @@ P wird als \textit{Duration Designator} bezeichnet und kennzeichnet den Start ei
             S & time & Sekunden \\
             \hline
         \end{tabular}
-        \caption{Designatoren für ISO 8601 Zeitspannen}
+        \caption{Designatoren für ISO-8601-Zeitspannen}
     \end{table}
 \end{center}
 Designatoren mit vorstehender Null können auch ausgelassen werden. 
@@ -355,9 +360,10 @@ Beispiele:
 \end{itemize}
 
 \subsubsection{Beispiel - MPD}
+\label{mpd_example}
  Die Firma Bitmovin bietet öffentlich eine Media Presentation Description \footnote{\url{https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd}} für Testzwecke an. 
  
- Diese wird hier verwendet um die besprochenen Elemente in einen praktischen Kontext zu setzen.
+ Diese wird hier verwendet, um die besprochenen Elemente in einen praktischen Kontext zu setzen.
 
 \begin{lstlisting}[language=XML,basicstyle=\small]
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -399,13 +405,62 @@ type="static" availabilityStartTime="2015-08-04T09:33:14.000Z" publishTime="2015
 </MPD>
 \end{lstlisting}
 
-Im Root-Tag der gelisteten MPD wird eine minimale Pufferzeit von einer Sekunde angegeben. Die Datei besteht nur aus einer einzigen \elem{Period} die die gesamte Dauer des Videos umfasst, listet jedoch zwei verschiedene \elem{AdaptationSet}s. 
+Im Root-Tag der gelisteten MPD wird eine minimale Pufferzeit von einer Sekunde angegeben. Die Datei besteht nur aus einer einzigen \elem{Period}, die die gesamte Dauer des Videos umfasst, listet jedoch zwei verschiedene \elem{AdaptationSet}s. 
 
-Anhand des \attr{mimeType}s lässt sich erkennen dass es sich bei ersterem \elem{AdaptationSet} um Videodaten handelt. Außerdem verrät das \attr{codec}-Attribut dass die Daten mit H.264 kodiert wurden. Eine Liste der zulässigen Parameter für \attr{codec} findet sich im RFC 6381. Für eine Reihe verschiedener Auflösungen und Bitraten finden sich in dem \elem{AdaptationSet} unterschiedliche \elem{Representation}s.
+Anhand des \attr{mimeType}s lässt sich erkennen, dass es sich bei ersterem \elem{AdaptationSet} um Videodaten handelt. Außerdem verrät das \attr{codec}-Attribut, dass die Daten mit H.264 kodiert wurden. Eine Liste der zulässigen Parameter für \attr{codec} findet sich im RFC 6381. Für eine Reihe verschiedener Auflösungen und Bitraten finden sich in dem \elem{AdaptationSet} unterschiedliche \elem{Representation}s.
 
 Das zweite \elem{AdaptationSet} beinhält die zugehörigen Audiodaten, welche mithilfe von MP4-Audio (\textbf{A}dvanced \textbf{A}udio \textbf{C}oding) kodiert wurden.
 
-Beide \elem{AdaptationSet}s verwenden für die Auflösung der URL zu den jeweiligen Segmentdaten \elem{SegmentTemplate}s mit den besprochenen Ersetzungsidentifikatoren. Wie in \ref{segment_formats} erwähnt wird, wird zu Beginn des Streams ein Initialisierungssegment gesendet welches von der Engine die die Mediendaten abspielen soll verarbeitet wird. Dieses Segment wird in der Praxis gerne von den restlichen Mediensegmenten separat behandelt. Aus diesem Grund kann mit \attr{initialization} ein dediziertes URL-Template für das Initialisierungssegment angelegt werden.
+Beide \elem{AdaptationSet}s verwenden für die Auflösung der URL zu den jeweiligen Segmentdaten \elem{SegmentTemplate}s mit den besprochenen Ersetzungsidentifikatoren. Wie in \ref{segment_formats} erwähnt wird, wird zu Beginn des Streams ein Initialisierungssegment gesendet, welches von der Engine, die die Mediendaten abspielen soll verarbeitet wird. Dieses Segment wird in der Praxis gerne von den restlichen Mediensegmenten separat behandelt. Aus diesem Grund kann mit \attr{initialization} ein dediziertes URL-Template für das Initialisierungssegment angelegt werden.
+
+Im Falle der Beispiel-MPD wurde kein \elem{BaseURL}-Element angegeben. Nach der in Abschnitt \ref{base_url_finding} eingeführten Vorgehensweise, wird die URL, welche zum Erhalt der MPD verwendet wurde, als Basis-URL gesetzt. Der Dateiname wird dabei exkludiert, und wir erhalten folgende Basis-URL:
+
+\begin{center}
+	\url{https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/}
+\end{center}
+
+Nun betrachten wir das \elem{SegmentTemplate} im ersten \elem{AdaptationSet} (\attr{mimeType = video/mp4}). Nehmen wir außerdem an, dass der jeweilige Client eine Representation mit der \attr{id} 270\_400000 ausgewählt hat. Nun können die URLs für Initalisierungs- und Mediensegmente gebildet werden, indem der Ersetzungsidentifikator \textit{\$RepresentationID\$} mit der gewählten id ausgetauscht wird:
+
+\begin{itemize}
+	\item Indexsegment-URL (Attribut \attr{initialization}): 
+	
+	../video/270\_400000/dash/init.mp4
+
+	\item URLs der Mediensegment(e) (Attribut \attr{media}):
+	
+	../video/270\_400000/dash/segment\_\$Number\$.m4s
+\end{itemize}
+
+Der Identifikator \textit{\$Number\$} bei Mediensegmenten beschreibt eine fortlaufende Nummer, welche ein Mediensegment eindeutig identifiziert. Bevor diese Nummern allerdings eingesetzt werden können, muss die Gesamtanzahl an Segmenten für den Stream errechnet werden. Um die Dauer für ein einzelnes Mediensegment zu erhalten, wird das \attr{duration}-Attribut durch das \attr{timescale}-Attribut (beide im \elem{SegmentTemplate} angegeben) gerechnet:
+
+\begin{center}
+	$D_{seg} = \frac{duration }{timescale} = \frac{100000}{25000}= 4$ Sekunden pro Segment
+\end{center}
+
+Im root-Tag der MPD beschreibt das Attribut \attr{mediaPresentationDuration} die Gesamtdauer des Mediums. Diese kann nun durch die Dauer pro Segment geteilt werden, um die Anzahl der Mediensegmente zu erhalten:
+
+\begin{center}
+	$N_{seg} = \lfloor \frac{mediaPresentationDuration}{D_{seg}} \rfloor = \lfloor \frac{210}{4} \rfloor = 52$
+\end{center}
+
+Die untere Gaußklammer wird verwendet, da es keine \textit{halben} Segmente gibt und die Gesamtdauer des Videos nicht restlos durch die Segmentdauer teilbar sein muss. Mit dem gewonnen Wissen über die Anzahl der Segmente in Verbindung mit dem \attr{startNumber}-Attribut, können auch die URLs für alle Mediensegmente generiert werden.
+
+Als letzten Schritt wird die Basis-URL mit den von \elem{SegmentTemplate} generierten URL-Teilen zusammengesetzt. Dadurch ergibt sich eine vollständige Liste von URLs für den Videostream:
+
+\begin{itemize}
+	\item \textbf{Indexsegment}
+	 
+		\url{https://bitmovin-a.akamaihd.net/content/MI201109210084_1/video/270_400000/dash/init.mp4}
+
+	\item \textbf{Mediensegmente}
+	\begin{itemize}
+		\item \url{https://bitmovin-a.akamaihd.net/content/MI201109210084_1/video/270_400000/dash/segment_1.m4s}
+		\item \url{https://bitmovin-a.akamaihd.net/content/MI201109210084_1/video/270_400000/dash/segment_2.m4s}
+		\item ... 
+		\item \url{https://bitmovin-a.akamaihd.net/content/MI201109210084_1/video/270_400000/dash/segment_52.m4s}
+	\end{itemize}
+\end{itemize}
+
 
 
 \subsection{Segmentformate}
