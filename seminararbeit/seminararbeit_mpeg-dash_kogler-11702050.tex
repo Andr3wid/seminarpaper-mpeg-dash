@@ -156,18 +156,18 @@ Smartphones, die mit steigender Tendenz einen Großteil des globalen Internetver
 
 Diese Umstände und der wachsende Markt führten schließlich zur Idee des adaptiven Videostreamings. Ein Konzept, in dem die Bitrate des zu übertragenden Videos während der Wiedergabe dynamisch an die Netzwerkgegebenheiten angepasst (adaptiert) wird. Das führt bei Netzwerkengpässen zwar dazu dass Teile des konsumierten Videos mit geringerer Qualität wiedergegeben werden, vermeidet allerdings gefürchtete Unterbrechungen der Medienwiedergabe und beeinträchtigt die QoE für den Benutzer merklich weniger \cite{seufert_survey_2015}.
 
-\section{Adaptive-Streaming Standards - Überblick}
-Adaptives Streaming ist ein generelles Konzept und keine konkrete Technologie. Zur konkreten Umsetzung haben sich in den letzten Jahren zwei große Standards gebildet. Einerseits wurde von Apple das proprietäre Protokoll HLS (HTTP Live Streaming) entwickelt, während die Moving Pictures Expert Group (MPEG) den offenen Standard MPEG-DASH (Dynamic Adaptive Streaming over HTTP) entwickelt hat. Der DASH-Standard wurde 2012 offiziell von MPEG unter der ISO/IEC-Nummer 23009 \cite{international_organization_for_standardization_isoiec_nodate} veröffentlicht und besteht aus acht Parts:
+\section{Adaptive-Streaming-Standards - Überblick}
+Adaptives Streaming ist ein generelles Konzept und keine konkrete Technologie. Zur konkreten Umsetzung haben sich in den letzten Jahren zwei große Standards gebildet. Einerseits wurde von Apple das vormals proprietäre\footnote{mittlerweile als Internet-Standard unter RFC 8216 \cite{pantos_http_nodate} verfügbar} Protokoll HLS (HTTP Live Streaming) entwickelt, während die Moving Pictures Expert Group (MPEG) den offenen Standard MPEG-DASH (Dynamic Adaptive Streaming over HTTP) entwickelt hat. Der DASH-Standard wurde 2012 offiziell von MPEG unter der ISO/IEC-Nummer 23009 \cite{international_organization_for_standardization_isoiec_nodate} veröffentlicht und besteht aus acht Teilen:
 
 \begin{itemize}
-	\item \textbf{Part 1:} Media presentation description and segment formats
-	\item \textbf{Part 2:} Reference software and conformance
-	\item \textbf{Part 3:} Implementation guidelines
-	\item \textbf{Part 4:} Format Independent Segment encryption and authentication
-	\item \textbf{Part 5:} Server and network assisted DASH (SAND)
+	\item \textbf{Part 1:} Media Presentation Description and Segment Formats
+	\item \textbf{Part 2:} Reference Software and Conformance
+	\item \textbf{Part 3:} Implementation Guidelines
+	\item \textbf{Part 4:} Format Independent Segment Encryption and Authentication
+	\item \textbf{Part 5:} Server and Network Assisted DASH (SAND)
 	\item \textbf{Part 6:} DASH with Server Push and WebSockets
-	\item \textbf{Part 7:} Delivery of CMAF content with DASH
-	\item \textbf{Part 8:} Session based DASH operation
+	\item \textbf{Part 7:} Delivery of CMAF Content with DASH
+	\item \textbf{Part 8:} Session based DASH Operation
 \end{itemize}
 
 HLS wurde 2009 von Apple veröffentlicht und wird im RFC 8216 \cite{pantos_http_nodate} der IETF beschrieben.
@@ -175,7 +175,7 @@ HLS wurde 2009 von Apple veröffentlicht und wird im RFC 8216 \cite{pantos_http_
 Beide Technologien setzen für die Übertragung auf der Applikationsebene das Hyper Text Transfer Protocol (HTTP) ein. Beide Protokolle werden von einer weiten Palette an Endgeräten unterstützt. Ausnahme ist die Unterstützung bei Apple Geräten. Der Safari-Browser, welcher bei iPhone und iPad als Standard ausgeliefert wird, unterstützt nativ kein MPEG-DASH \cite{timmerer_live_2015} .
 
 \section{Einführung in MPEG-DASH}
-Um adaptives Streaming via MPEG-DASH zu ermöglichen wird die Mediendatei zunächst in mehrere, kleine Segmente zwischen zwei und zehn Sekunden Länge aufgeteilt \cite{international_organization_for_standardization_isoiec_nodate}. Jedes dieser Segmente wird anschließend in verschiedenen Qualitätsstufen kodiert. Segmente in einer höheren Qualitätsstufe benötigen mehr Speicherplatz und später auch mehr Bandbreite bei der Übertragung. Die so entstandenen Segmente werden schließlich auf einen Webserver hochgeladen, wo sie mittels HTTP GET-Requests angefragt werden können \cite{sodagar_mpeg-dash_2011}. 
+Um adaptives Streaming via MPEG-DASH zu ermöglichen, wird die Mediendatei zunächst in mehrere, kleine Segmente zwischen zwei und zehn Sekunden Länge aufgeteilt \cite{international_organization_for_standardization_isoiec_nodate}. Jedes dieser Segmente wird anschließend in verschiedenen Qualitätsstufen kodiert. Segmente in einer höheren Qualitätsstufe benötigen mehr Speicherplatz und später auch mehr Bandbreite bei der Übertragung. Die so entstandenen Segmente werden schließlich auf einen Webserver hochgeladen, wo sie mittels HTTP GET-Requests angefragt werden können \cite{sodagar_mpeg-dash_2011}. 
 
 Clientseitig übernimmt DASH-konforme Software die Kommunikation mit dem Webserver. Um dem Client einen Überblick über die verfügbaren Qualitätsstufen des angefragten Videos zu bieten wird vom Server zu Beginn die \textit{Media Presentation Description}, kurz \textit{MPD}, bereitgestellt. Ein Teil der Clientsoftware misst permanent die zur Verfügung stehende Bandbreite und bestimmt so in welcher Qualitätsstufe ein Segment angefragt wird. Dieser Teil der Software wird \textit{Bitrate Adaptation Algorithm} genannt \cite{bentaleb_survey_2019}. 
 
