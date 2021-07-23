@@ -1,0 +1,17 @@
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MPD ... >
+
+    <BaseURL>http://myserver.example.com</BaseURL>
+
+    <Period duration="PT0H0M45S">
+        <!-- ... -->
+    </Period>
+
+    <Period duration="PT0H1M32S">
+        <!-- ... -->
+    </Period>
+
+</MPD>
+
+

@@ -1,0 +1,52 @@
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MPD ... >
+
+    <BaseURL>http://myserver.example.com</BaseURL>
+
+    ...
+    <Period duration="PT0H0M45S">
+
+        ...
+        <AdaptationSet contentType="video">
+            <BaseURL>video/</BaseURL>
+
+            ...
+            <Representation id="1" bandwidth="2400000" 
+                            width="1280" height="720">
+                <BaseURL>720p/</BaseURL>
+
+                <SegmentList>
+                    <Initialization sourceURL="init.mp4" />
+                    <SegmentURL media="segment-1.m4s" />
+                    <SegmentURL media="segment-2.m4s" />
+                    <SegmentURL media="segment-3.m4s" />
+                    <SegmentURL media="segment-4.m4s" />
+                    <SegmentURL media="segment-5.m4s" />
+                </SegmentList>
+
+            </Representation>
+            ...
+
+            <Representation id="2" bandwidth="4800000" 
+                            width="1920" height="1080">
+                <BaseURL>1080p/</BaseURL>
+                <!-- ... -->
+            </Representation>
+        </AdaptationSet>
+        ...
+
+        <AdaptationSet mimeType="audio/mp4" codecs="mp4a.40.2">
+            <BaseURL>audio/</BaseURL>
+            <!-- ... -->
+        </AdaptationSet>
+    </Period>
+    ...
+
+    <Period duration="PT0H1M32S">
+        <!-- ... -->
+    </Period>
+
+</MPD>
+
+

@@ -1,0 +1,49 @@
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MPD    profiles="urn:mpeg:dash:profile:isoff-main:2011" 
+        type="static" 
+        mediaPresentationDuration="P0Y0M0DT0H3M30.000S" 
+        minBufferTime="P0Y0M0DT0H0M1.000S" 
+        xmlns="urn:mpeg:dash:schema:mpd:2011">
+
+    <BaseURL>http://myserver1.example.com</BaseURL>
+    <BaseURL>http://myserver2.example.com</BaseURL>
+
+    <Period duration="PT0H0M45S">
+
+        <AdaptationSet contentType="video">
+            <BaseURL>video/</BaseURL>
+
+            <Representation id="1" bandwidth="2400000" 
+                            width="1280" height="720">
+                <BaseURL>720p/</BaseURL>
+
+                <SegmentTemplate 
+                        initialization="init.mp4"
+                        media="segment-$Number$.m4s"
+                        startNumber="1"
+                        timescale="12"
+                        duration="60" />
+
+            </Representation>
+
+            <Representation id="2" bandwidth="4800000" 
+                            width="1920" height="1080">
+
+                    <SegmentList>
+                        <SegmentURL media="segment-1.m4s"/>
+                        <SegmentURL media="segment-2.m4s"/>
+                        <SegmentURL media="segment-3.m4s"/>
+                        <SegmentURL media="segment-4.m4s"/>
+                    </SegmentList>
+
+            </Representation>
+        </AdaptationSet>
+
+        <AdaptationSet lang="en" mimeType="audio/mp4" codecs="mp4a.40.2">
+            <BaseURL>audio/en/audio.m4a</BaseURL>
+            <SegmentBase indexRange="0-512"</SegmentBase>
+        </AdaptationSet>
+    </Period>
+
+</MPD>

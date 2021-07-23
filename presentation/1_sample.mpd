@@ -1,0 +1,15 @@
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MPD    profiles="urn:mpeg:dash:profile:isoff-main:2011" 
+        type="static" 
+        mediaPresentationDuration="P0Y0M0DT0H3M30.000S" 
+        minBufferTime="P0Y0M0DT0H0M1.000S" 
+        xmlns="urn:mpeg:dash:schema:mpd:2011">
+
+        <BaseURL>http://myserver.example.com</BaseURL>
+
+    <!-- Content omitted for clarity -->
+
+</MPD>
+
+
